@@ -1,0 +1,15 @@
+{
+  "checkedAt": "2026-11-14T04:25:49.127Z",
+  "syntheticOnly": true,
+  "model": "gemini-decision-1",
+  "distressThreshold": 0.3,
+  "choiceConfidenceThreshold": 0.6,
+  "fixtures": 12,
+  "evaluated": 12,
+  "unavailable": 0,
+  "supportLabelAgreements": 12,
+  "goalLabelComparisons": 9,
+  "goalLabelAgreements": 8,
+  "durationMs": 3131,
+  "limitation": "Small authored fixture set, not clinical validation or a representative calibration dataset. Finnish needs native review. No probabilities or individual model verdicts are retained."
+}

@@ -1,0 +1,248 @@
+{
+  "date": "2026-11-14",
+  "method": "WCAG sRGB luminance; actual scene/sky gradients and maximum motion opacity composited under the canvas field; 101 dawn progress values and 1pt vertical samples. No palette/font change.",
+  "topTextArea": "Top 280pt; decorative sun/glow kept below 294pt. Cloud and maximum star are conservatively combined.",
+  "top": [
+    {
+      "ratio": 4.678124699546289,
+      "height": 568,
+      "progress": 1,
+      "y": 280,
+      "foreground": "textSecondary"
+    },
+    {
+      "ratio": 4.7256851374922375,
+      "height": 667,
+      "progress": 1,
+      "y": 280,
+      "foreground": "textSecondary"
+    },
+    {
+      "ratio": 4.98739085397677,
+      "height": 740,
+      "progress": 1,
+      "y": 0,
+      "foreground": "textSecondary"
+    },
+    {
+      "ratio": 4.98739085397677,
+      "height": 844,
+      "progress": 1,
+      "y": 0,
+      "foreground": "textSecondary"
+    },
+    {
+      "ratio": 4.98739085397677,
+      "height": 932,
+      "progress": 1,
+      "y": 0,
+      "foreground": "textSecondary"
+    }
+  ],
+  "lowerPlainTextArea": "Lower180pt. On >=740pt-high mobile portraits, actual near hill/pine/canvas tokens; smaller screens protect against every scene/sun token.",
+  "lower": [
+    {
+      "ratio": 4.769454470344751,
+      "height": 568,
+      "progress": 0,
+      "y": 388,
+      "foreground": "textSecondary",
+      "background": "#F0D2A6"
+    },
+    {
+      "ratio": 4.769454470344751,
+      "height": 667,
+      "progress": 0,
+      "y": 487,
+      "foreground": "textSecondary",
+      "background": "#F0D2A6"
+    },
+    {
+      "ratio": 5.441653277181157,
+      "height": 740,
+      "progress": 1,
+      "y": 560,
+      "foreground": "textSecondary",
+      "background": "#4a5f7c"
+    },
+    {
+      "ratio": 5.805811298494828,
+      "height": 844,
+      "progress": 1,
+      "y": 664,
+      "foreground": "textSecondary",
+      "background": "#4a5f7c"
+    },
+    {
+      "ratio": 6.072559305017368,
+      "height": 932,
+      "progress": 1,
+      "y": 752,
+      "foreground": "textSecondary",
+      "background": "#4a5f7c"
+    }
+  ],
+  "defaultMorning": {
+    "foreground": "textSecondary",
+    "background": "accentLight",
+    "ratio": 4.769454470344751
+  },
+  "opaqueText": [
+    {
+      "label": "Primary on canvas",
+      "foreground": "textPrimary",
+      "background": "canvas",
+      "ratio": 15.631294327482486
+    },
+    {
+      "label": "Secondary on canvas",
+      "foreground": "textSecondary",
+      "background": "canvas",
+      "ratio": 9.923585202784253
+    },
+    {
+      "label": "Primary on protected surface",
+      "foreground": "textPrimary",
+      "background": "surfaceProtected",
+      "ratio": 14.590220307830368
+    },
+    {
+      "label": "Secondary on protected surface",
+      "foreground": "textSecondary",
+      "background": "surfaceProtected",
+      "ratio": 9.262655498565268
+    },
+    {
+      "label": "Primary on surface",
+      "foreground": "textPrimary",
+      "background": "surface",
+      "ratio": 13.590190304651097
+    },
+    {
+      "label": "Secondary on surface",
+      "foreground": "textSecondary",
+      "background": "surface",
+      "ratio": 8.627782740495437
+    },
+    {
+      "label": "Primary on raised surface",
+      "foreground": "textPrimary",
+      "background": "surfaceRaised",
+      "ratio": 11.746561577753685
+    },
+    {
+      "label": "Secondary on raised surface",
+      "foreground": "textSecondary",
+      "background": "surfaceRaised",
+      "ratio": 7.457348202550574
+    },
+    {
+      "label": "Pressed secondary action",
+      "foreground": "textPrimary",
+      "background": "lineQuiet",
+      "ratio": 8.180598739739864
+    },
+    {
+      "label": "Quiet action over hold fill",
+      "foreground": "textSecondary",
+      "background": "lineQuiet",
+      "ratio": 5.19348346354583
+    },
+    {
+      "label": "Disabled and loading actions",
+      "foreground": "textSecondary",
+      "background": "surfaceRaised",
+      "ratio": 7.457348202550574
+    },
+    {
+      "label": "Outlined quiet action",
+      "foreground": "textSecondary",
+      "background": "surfaceProtected",
+      "ratio": 9.262655498565268
+    },
+    {
+      "label": "Pressed outlined quiet action",
+      "foreground": "textSecondary",
+      "background": "surfaceRaised",
+      "ratio": 7.457348202550574
+    },
+    {
+      "label": "Primary action",
+      "foreground": "textOnAccent",
+      "background": "accent",
+      "ratio": 9.305618421975476
+    },
+    {
+      "label": "Pressed primary action",
+      "foreground": "textOnAccent",
+      "background": "accentPressed",
+      "ratio": 7.603393527703252
+    },
+    {
+      "label": "Hold fill",
+      "foreground": "textOnAccent",
+      "background": "accentLight",
+      "ratio": 11.215021915555882
+    },
+    {
+      "label": "Quiet accent text",
+      "foreground": "accent",
+      "background": "surfaceProtected",
+      "ratio": 9.717783427016933
+    }
+  ],
+  "controlBoundaries": [
+    {
+      "label": "Quiet outline",
+      "foreground": "lineVisible",
+      "background": "surfaceProtected",
+      "ratio": 5.816098625340524
+    },
+    {
+      "label": "Pressed or disabled quiet outline",
+      "foreground": "lineVisible",
+      "background": "surfaceRaised",
+      "ratio": 4.68253112039611
+    },
+    {
+      "label": "Secondary pressed outline",
+      "foreground": "lineVisible",
+      "background": "lineQuiet",
+      "ratio": 3.2610315732606425
+    },
+    {
+      "label": "Outline against canvas",
+      "foreground": "lineVisible",
+      "background": "canvas",
+      "ratio": 6.2311018978632
+    }
+  ],
+  "topTimes": [
+    {
+      "hour": 6,
+      "progress": 0.5,
+      "luminance": 0.023117402771030828
+    },
+    {
+      "hour": 7.5,
+      "progress": 0.875,
+      "luminance": 0.049311513136017386
+    },
+    {
+      "hour": 10,
+      "progress": 1,
+      "luminance": 0.060820087184450485
+    },
+    {
+      "hour": 21,
+      "progress": 0,
+      "luminance": 0.010397969214612272
+    }
+  ],
+  "limitations": [
+    "Mathematical token/layout model, not screenshot pixel measurement.",
+    "Portrait widths320–430pt and heights568–932pt; dynamic type and unusual/landscape viewport visual acceptance remains separate.",
+    "Native/web motion lifecycle checks and physical battery measurements are separate; this report does not claim battery testing."
+  ],
+  "allMeasuredPairsPass": true
+}

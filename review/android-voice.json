@@ -1,0 +1,37 @@
+{
+  "checkedOn": "2026-11-14",
+  "platform": "Android API 36 ARM64 emulator",
+  "classifier": "silero.vad.v6.2.onnx",
+  "runtime": "com.microsoft.onnxruntime:onnxruntime-android:1.23.2",
+  "modelSha256": "1a153a22f4509e292a94e67d6f9b85e8deb25b4988682b7e174c65279d8788e3",
+  "modelBytes": 2327524,
+  "unitTests": 17,
+  "unitFailures": 0,
+  "instrumentationTests": 5,
+  "instrumentationFailures": 0,
+  "instrumentationSeconds": 1.267,
+  "instrumentationCases": [
+    "testCompleteSilenceRunsRealDecoderAndBundledModel",
+    "testIncompleteAndShortNeverBecomeSilent",
+    "testAndroidAacRecordingContainerDecodesCompletely",
+    "testInvalidAndRemoteFilesNeverAnalyze",
+    "testSpeechAndDelayedOnsetUseActualModel"
+  ],
+  "fullDebugAppBuild": "passed",
+  "apkSha256": "b6fdad6ee0da1f591f9dcf127c99c28d9e43b866c02ce71f1e5762ecf90458f8",
+  "appInstalledPreservingData": true,
+  "modelBundled": true,
+  "licensesBundled": true,
+  "testSpeechBundledInApp": false,
+  "typescript": "passed",
+  "targetedLint": "passed",
+  "actualMicrophoneUsed": false,
+  "personalAudioUsed": false,
+  "physicalDeviceAcceptance": "pending",
+  "limitations": [
+    "Platform classifiers have different window sizes and are not interchangeable accuracy measurements.",
+    "Noise, whisper, real microphone timing and physical-device performance remain unverified.",
+    "Fixture pass is not clinical calibration or a reliability/latency guarantee."
+  ],
+  "finalBuildLog": "/tmp/aamu-android-voice-build-final.log"
+}

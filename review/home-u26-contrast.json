@@ -1,0 +1,223 @@
+{
+  "date": "2026-11-14",
+  "method": "WCAG sRGB relative luminance, normal-text minimum 4.5:1; control-boundary minimum 3:1. Canvas alpha composited in sRGB over all existing landscape/sun tokens. Opaque surfaces checked directly.",
+  "home": {
+    "clearHorizon": true,
+    "protectedTopMinimumOpacity": 0.8,
+    "protectedBand": "At least top35% and280pt, capped at78% on very short viewports; caller keeps hero text in this band.",
+    "textOnProtectedTop": [
+      {
+        "foreground": "textPrimary",
+        "worstBackground": "accentLight",
+        "ratio": 9.558562264193732,
+        "minimum": 4.5,
+        "passes": true
+      },
+      {
+        "foreground": "textSecondary",
+        "worstBackground": "accentLight",
+        "ratio": 6.068288719896548,
+        "minimum": 4.5,
+        "passes": true
+      }
+    ],
+    "middle": "No text contrast claim for decorative clear horizon; Home lower text uses opaque cards and controls."
+  },
+  "defaultMorning": {
+    "minimumOpacity": 0.72,
+    "text": [
+      {
+        "foreground": "textPrimary",
+        "worstBackground": "accentLight",
+        "ratio": 7.512682673049322,
+        "minimum": 4.5,
+        "passes": true
+      },
+      {
+        "foreground": "textSecondary",
+        "worstBackground": "accentLight",
+        "ratio": 4.769454470344751,
+        "minimum": 4.5,
+        "passes": true
+      }
+    ]
+  },
+  "opaqueText": [
+    {
+      "label": "Primary on canvas",
+      "foreground": "textPrimary",
+      "background": "canvas",
+      "ratio": 15.631294327482486,
+      "minimum": 4.5,
+      "passes": true
+    },
+    {
+      "label": "Secondary on canvas",
+      "foreground": "textSecondary",
+      "background": "canvas",
+      "ratio": 9.923585202784253,
+      "minimum": 4.5,
+      "passes": true
+    },
+    {
+      "label": "Primary on protected surface",
+      "foreground": "textPrimary",
+      "background": "surfaceProtected",
+      "ratio": 14.590220307830368,
+      "minimum": 4.5,
+      "passes": true
+    },
+    {
+      "label": "Secondary on protected surface",
+      "foreground": "textSecondary",
+      "background": "surfaceProtected",
+      "ratio": 9.262655498565268,
+      "minimum": 4.5,
+      "passes": true
+    },
+    {
+      "label": "Primary on surface",
+      "foreground": "textPrimary",
+      "background": "surface",
+      "ratio": 13.590190304651097,
+      "minimum": 4.5,
+      "passes": true
+    },
+    {
+      "label": "Secondary on surface",
+      "foreground": "textSecondary",
+      "background": "surface",
+      "ratio": 8.627782740495437,
+      "minimum": 4.5,
+      "passes": true
+    },
+    {
+      "label": "Primary on raised surface",
+      "foreground": "textPrimary",
+      "background": "surfaceRaised",
+      "ratio": 11.746561577753685,
+      "minimum": 4.5,
+      "passes": true
+    },
+    {
+      "label": "Secondary on raised surface",
+      "foreground": "textSecondary",
+      "background": "surfaceRaised",
+      "ratio": 7.457348202550574,
+      "minimum": 4.5,
+      "passes": true
+    },
+    {
+      "label": "Pressed secondary action",
+      "foreground": "textPrimary",
+      "background": "lineQuiet",
+      "ratio": 8.180598739739864,
+      "minimum": 4.5,
+      "passes": true
+    },
+    {
+      "label": "Quiet action over hold fill",
+      "foreground": "textSecondary",
+      "background": "lineQuiet",
+      "ratio": 5.19348346354583,
+      "minimum": 4.5,
+      "passes": true
+    },
+    {
+      "label": "Disabled and loading actions",
+      "foreground": "textSecondary",
+      "background": "surfaceRaised",
+      "ratio": 7.457348202550574,
+      "minimum": 4.5,
+      "passes": true
+    },
+    {
+      "label": "Outlined quiet action",
+      "foreground": "textSecondary",
+      "background": "surfaceProtected",
+      "ratio": 9.262655498565268,
+      "minimum": 4.5,
+      "passes": true
+    },
+    {
+      "label": "Pressed outlined quiet action",
+      "foreground": "textSecondary",
+      "background": "surfaceRaised",
+      "ratio": 7.457348202550574,
+      "minimum": 4.5,
+      "passes": true
+    },
+    {
+      "label": "Primary action",
+      "foreground": "textOnAccent",
+      "background": "accent",
+      "ratio": 9.305618421975476,
+      "minimum": 4.5,
+      "passes": true
+    },
+    {
+      "label": "Pressed primary action",
+      "foreground": "textOnAccent",
+      "background": "accentPressed",
+      "ratio": 7.603393527703252,
+      "minimum": 4.5,
+      "passes": true
+    },
+    {
+      "label": "Hold fill",
+      "foreground": "textOnAccent",
+      "background": "accentLight",
+      "ratio": 11.215021915555882,
+      "minimum": 4.5,
+      "passes": true
+    },
+    {
+      "label": "Quiet accent text",
+      "foreground": "accent",
+      "background": "surfaceProtected",
+      "ratio": 9.717783427016933,
+      "minimum": 4.5,
+      "passes": true
+    }
+  ],
+  "opaqueControlBoundaries": [
+    {
+      "label": "Quiet outline",
+      "foreground": "lineVisible",
+      "background": "surfaceProtected",
+      "ratio": 5.816098625340524,
+      "minimum": 3,
+      "passes": true
+    },
+    {
+      "label": "Pressed or disabled quiet outline",
+      "foreground": "lineVisible",
+      "background": "surfaceRaised",
+      "ratio": 4.68253112039611,
+      "minimum": 3,
+      "passes": true
+    },
+    {
+      "label": "Secondary pressed outline",
+      "foreground": "lineVisible",
+      "background": "lineQuiet",
+      "ratio": 3.2610315732606425,
+      "minimum": 3,
+      "passes": true
+    },
+    {
+      "label": "Outline against canvas",
+      "foreground": "lineVisible",
+      "background": "canvas",
+      "ratio": 6.2311018978632,
+      "minimum": 3,
+      "passes": true
+    }
+  ],
+  "limitations": [
+    "Mathematical token/compositing check, not screenshot pixel or native accessibility acceptance.",
+    "Home clear middle band must stay text-free; large-font/scroll layout requires visual QA.",
+    "Existing palette and typography unchanged."
+  ],
+  "allMeasuredPairsPass": true
+}

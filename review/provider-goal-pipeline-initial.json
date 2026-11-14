@@ -1,0 +1,11 @@
+{
+  "checkedAt": "2026-11-14T04:27:19.438Z",
+  "syntheticOnly": true,
+  "model": "gemma-4-31b-it",
+  "durationMs": 16343,
+  "successfulLadder": false,
+  "source": "fallback",
+  "judgeSource": null,
+  "serverDeadlineMs": 25000,
+  "automaticRetries": 0
+}

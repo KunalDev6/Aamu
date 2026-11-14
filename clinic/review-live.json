@@ -1,0 +1,27 @@
+{
+  "checkedAt": "2026-11-14T18:39:56Z",
+  "scope": "U28 local clinic proxy read and automated checks; no browser or callback interaction performed",
+  "tests": { "passed": 35, "failed": 0, "existingRuleTests": 19, "buildProviderPollingProxyTests": 16 },
+  "build": "passed, default DEMO_MODE=true",
+  "javascriptSyntaxCheck": "passed",
+  "liveRead": {
+    "temporaryOrigin": "http://127.0.0.1:4175",
+    "pageStatus": 200,
+    "proxyStatus": 200,
+    "cacheControl": "no-store",
+    "demo": true,
+    "records": 4,
+    "presenters": 0,
+    "fictionalProfiles": 4,
+    "outstandingCalls": 0,
+    "fictionalStatuses": ["drifting", "insufficient", "might_need_call", "steady"]
+  },
+  "privacy": {
+    "dashboardToken": "Loaded privately by local server; never printed or placed in browser configuration",
+    "upstream": "Fixed loopback GET /clinic/patients with redirects rejected",
+    "unexpectedPayloadFields": "Dropped by contract parser",
+    "browserFixtures": "None; all active fictional profiles supplied by API demo namespace"
+  },
+  "pending": ["Root browser QA", "Connected presenter display", "Mobile callback request appearing live and remaining after reload"],
+  "serverOwnership": "Temporary port4175 server stopped after this check. Pre-existing port4174 server was not touched and needs restart for the new proxy."
+}

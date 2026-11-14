@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aamu — visual review</title>
+  <link rel="stylesheet" href="generated/theme.css">
+  <link rel="stylesheet" href="review.css">
+</head>
+<body>
+  <div class="review-shell">
+    <aside class="review-panel" aria-label="Visual review controls">
+      <p class="review-eyebrow">Aamu · visual review</p>
+      <h1>Nightwater</h1>
+      <p class="review-description">A quiet night, opening into morning.</p>
+      <nav class="review-tabs" aria-label="Preview screen">
+        <a href="?screen=alarm&dawn=0.15">Alarm</a>
+        <a href="?screen=message&dawn=1">Message</a>
+        <a href="?screen=home&dawn=0.55">Home</a>
+      </nav>
+      <label class="review-range" for="dawn-progress">
+        <span>Sky · night to dawn</span>
+        <input id="dawn-progress" type="range" min="0" max="1" step="0.01" value="0.15">
+      </label>
+      <p class="review-caption">390 × 844 visual preview. Controls inside the phone are presentation only. No alarm, recording or service is running.</p>
+      <p id="review-announcement" class="review-caption" role="status" aria-live="polite"></p>
+    </aside>
+
+    <div class="phone-positioner">
+      <main class="phone" id="phone" aria-label="Aamu screen preview">
+        <div class="landscape" id="landscape" aria-hidden="true"></div>
+        <header class="app-header">
+          <span class="wordmark">aamu</span>
+          <button class="help-link" type="button" data-preview="Help is outside this three-screen visual review.">Need help now?</button>
+        </header>
+        <div class="screen-content" id="screen-content"></div>
+      </main>
+    </div>
+  </div>
+  <script type="module" src="review.js"></script>
+</body>
+</html>

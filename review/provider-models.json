@@ -1,0 +1,17 @@
+{
+  "checkedAt": "2026-11-14T03:46:02.737Z",
+  "source": "Authenticated Gemini API ListModels using the supplied event key",
+  "pages": 1,
+  "totalModels": 64,
+  "gemma": [
+    { "name": "models/gemma-4-26b-a4b-it", "supportedGenerationMethods": ["generateContent", "countTokens"] },
+    { "name": "models/gemma-4-31b-it", "supportedGenerationMethods": ["generateContent", "countTokens"] }
+  ],
+  "lyria": [
+    { "name": "models/lyria-3-clip-preview", "supportedGenerationMethods": ["generateContent", "countTokens"] },
+    { "name": "models/lyria-3-pro-preview", "supportedGenerationMethods": ["generateContent", "countTokens"] },
+    { "name": "models/lyria-3.5", "supportedGenerationMethods": ["generateContent", "countTokens"] },
+    { "name": "models/lyria-realtime-exp", "supportedGenerationMethods": ["bidiGenerateMusic"] }
+  ],
+  "scope": "Key-specific listing confirmed. No Lyria generation or quota test performed. The full two-phone demo has not yet passed, so composed dawn remains gated."
+}

@@ -1,0 +1,5 @@
+{
+  "platforms": ["apple", "android"],
+  "apple": { "modules": ["AamuVoiceModule"] },
+  "android": { "modules": ["expo.modules.aamuvoice.AamuVoiceModule"] }
+}

@@ -1,0 +1,23 @@
+plugins {
+  id 'com.android.library'
+  id 'expo-module-gradle-plugin'
+}
+
+group = 'expo.modules.aamuvoice'
+version = '0.1.0'
+
+android {
+  namespace 'expo.modules.aamuvoice'
+  defaultConfig {
+    versionCode 1
+    versionName '0.1.0'
+    testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+  }
+}
+
+dependencies {
+  // CPU inference only; the pinned model is an APK asset, never downloaded at runtime.
+  implementation 'com.microsoft.onnxruntime:onnxruntime-android:1.23.2'
+  testImplementation 'junit:junit:4.13.2'
+  androidTestImplementation 'androidx.test:runner:1.6.2'
+}

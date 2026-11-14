@@ -1,0 +1,33 @@
+{
+  "name": "aamu-api",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node --experimental-strip-types --env-file=.env src/server.ts",
+    "test": "node --experimental-require-module --experimental-strip-types --test --test-reporter=dot test/*.test.ts scripts/parse-model-object.test.mjs ../review/safety/draft-checker.test.mjs",
+    "typecheck": "tsc --noEmit",
+    "models:probe-decisions": "node --env-file=.env scripts/probe-decisions.mjs",
+    "models:evaluate-decisions": "node --experimental-strip-types --env-file=.env scripts/evaluate-decisions.ts",
+    "models:probe-pipeline": "node --experimental-strip-types --env-file=.env scripts/probe-goal-pipeline.ts",
+    "models:list": "node --env-file=.env scripts/list-models.mjs",
+    "models:probe-goal": "node --env-file=.env scripts/probe-goal-generation.mjs"
+  },
+  "engines": {
+    "node": ">=22.6.0"
+  },
+  "dependencies": {
+    "@fastify/websocket": "^11.3.7",
+    "@google/genai": "3.3.0",
+    "fastify": "5.12.8",
+    "ioredis": "^6.0.0",
+    "pg": "^8.23.1",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.5",
+    "@types/pg": "^8.23.1",
+    "@types/ws": "^8.18.2",
+    "typescript": "7.0.2",
+    "ws": "^8.23.0"
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "viewport": {
+    "height": 844,
+    "width": 390,
+    "x": 0,
+    "y": 0
+  },
+  "forcedReviewScenarios": true,
+  "captures": [
+    {
+      "time": "07:30",
+      "scenario": "night",
+      "path": "/Users/kunalkarki/Documents/junction-proj/review/screenshots/home-u27/0730-night.jpg",
+      "state": "Browser tab: 7, Title: \"Aamu\", URL: \"http://localhost:8082/preview?scene=home&time=07:30&scenario=night\".\n1 AXWebArea Aamu, URL: localhost:8082/preview?scene=home&time=07:30&scenario=night\n\t2 container root\n\t\t3 container\n\t\t\t4 image\n\t\t\t5 image\n\t\t\t6 image\n\t\t\t7 container\n\t\t\t\t8 text aamu\n\t\t\t\t9 text Demo\n\t\t\t\t10 button Help\n\t\t\t\t\t11 text Help\n\t\t\t\t12 button Settings\n\t\t\t\t\t13 text Settings\n\t\t\t14 container\n\t\t\t\t15 text Alarm tomorrow 07:00\n\nThe focused UI element is 1 AXWebArea Aamu, URL: localhost:8082/preview?scene=home&time=07:30&scenario=night"
+    },
+    {
+      "time": "07:30",
+      "scenario": "early",
+      "path": "/Users/kunalkarki/Documents/junction-proj/review/screenshots/home-u27/0730-early.jpg",
+      "state": "Browser tab: 7, Title: \"Aamu\", URL: \"http://localhost:8082/preview?scene=home&time=07:30&scenario=early\".\n1 AXWebArea Aamu, URL: localhost:8082/preview?scene=home&time=07:30&scenario=early\n\t2 container root\n\t\t3 container\n\t\t\t4 image\n\t\t\t5 image\n\t\t\t6 image\n\t\t\t7 container\n\t\t\t\t8 text aamu\n\t\t\t\t9 text Demo\n\t\t\t\t10 button Help\n\t\t\t\t\t11 text Help\n\t\t\t\t12 button Settings\n\t\t\t\t\t13 text Settings\n\t\t\t14 container\n\t\t\t\t15 text Alarm at 07:00\n\t\t\t\t16 button I’m already up\n\t\t\t\t\t17 text I’m already up\n\nThe focused UI element is 1 AXWebArea Aamu, URL: localhost:8082/preview?scene=home&time=07:30&scenario=early"
+    },
+    {
+      "time": "07:30",
+      "scenario": "up",
+      "path": "/Users/kunalkarki/Documents/junction-proj/review/screenshots/home-u27/0730-up.jpg",
+      "state": "Browser tab: 7, Title: \"Aamu\", URL: \"http://localhost:8082/preview?scene=home&time=07:30&scenario=up\".\n1 AXWebArea Aamu, URL: localhost:8082/preview?scene=home&time=07:30&scenario=up\n\t2 container root\n\t\t3 container\n\t\t\t4 image\n\t\t\t5 image\n\t\t\t6 image\n\t\t\t7 container\n\t\t\t\t8 text aamu\n\t\t\t\t9 text Demo\n\t\t\t\t10 button Help\n\t\t\t\t\t11 text Help\n\t\t\t\t12 button Settings\n\t\t\t\t\t13 text Settings\n\t\t\t14 container\n\t\t\t\t15 text You’re up.\n\t\t\t\t16 text Your partner isn’t up yet.\n\t\t\t\t17 text Today’s step · Tiny\n\t\t\t\t18 text Read one page by the window.\n\t\t\t\t19 button Done\n\t\t\t\t\t20 text Done\n\t\t\t\t21 button Too much today\n\t\t\t\t\t22 text Too much today\n\nThe focused UI element is 1 AXWebArea Aamu, URL: localhost:8082/preview?scene=home&time=07:30&scenario=up"
+    },
+    {
+      "time": "07:30",
+      "scenario": "evening",
+      "path": "/Users/kunalkarki/Documents/junction-proj/review/screenshots/home-u27/0730-evening.jpg",
+      "state": "Browser tab: 7, Title: \"Aamu\", URL: \"http://localhost:8082/preview?scene=home&time=07:30&scenario=evening\".\n1 AXWebArea Aamu, URL: localhost:8082/preview?scene=home&time=07:30&scenario=evening\n\t2 container root\n\t\t3 container\n\t\t\t4 image\n\t\t\t5 image\n\t\t\t6 image\n\t\t\t7 container\n\t\t\t\t8 text aamu\n\t\t\t\t9 text Demo\n\t\t\t\t10 button Help\n\t\t\t\t\t11 text Help\n\t\t\t\t12 button Settings\n\t\t\t\t\t13 text Settings\n\t\t\t14 container\n\t\t\t\t15 text You’re up.\n\t\t\t\t16 text You’re both up.\n\t\t\t\t17 text Did you get to it?\n\t\t\t\t18 text Read one page by the window.\n\t\t\t\t19 button Yes\n\t\t\t\t\t20 text Yes\n\t\t\t\t21 button Not today\n\t\t\t\t\t22 text Not today\n\nThe focused UI element is 1 AXWebArea Aamu, URL: localhost:8082/preview?scene=home&time=07:30&scenario=evening"
+    },
+    {
+      "time": "07:30",
+      "scenario": "off",
+      "path": "/Users/kunalkarki/Documents/junction-proj/review/screenshots/home-u27/0730-off.jpg",
+      "state": "Browser tab: 7, Title: \"Aamu\", URL: \"http://localhost:8082/preview?scene=home&time=07:30&scenario=off\".\n1 AXWebArea Aamu, URL: localhost:8082/preview?scene=home&time=07:30&scenario=off\n\t2 container root\n\t\t3 container\n\t\t\t4 image\n\t\t\t5 image\n\t\t\t6 image\n\t\t\t7 container\n\t\t\t\t8 text aamu\n\t\t\t\t9 text Demo\n\t\t\t\t10 button Help\n\t\t\t\t\t11 text Help\n\t\t\t\t12 button Settings\n\t\t\t\t\t13 text Settings\n\t\t\t14 container\n\t\t\t\t15 text Alarm is off today.\n\t\t\t\t16 button Turn alarm on\n\t\t\t\t\t17 text Turn alarm on\n\nThe focused UI element is 1 AXWebArea Aamu, URL: localhost:8082/preview?scene=home&time=07:30&scenario=off"
+    },
+    {
+      "time": "07:30",
+      "scenario": "settings",
+      "path": "/Users/kunalkarki/Documents/junction-proj/review/screenshots/home-u27/0730-settings.jpg",
+      "state": "Browser tab: 7, Title: \"Aamu\", URL: \"http://localhost:8082/preview?scene=settings&time=07:30\".\n1 AXWebArea Aamu, URL: localhost:8082/preview?scene=settings&time=07:30\n\t2 container root\n\t\t3 container\n\t\t\t4 image\n\t\t\t5 container\n\t\t\t\t6 button Back\n\t\t\t\t\t7 text ‹ Back\n\t\t\t\t8 text Demo\n\t\t\t9 container\n\t\t\t\t10 heading Settings, Value: 1\n\t\t\t\t\t11 text Settings\n\t\t\t\t12 container\n\t\t\t\t\t13 button Alarm, 07:00 · On\n\t\t\t\t\t\t14 text Alarm\n\t\t\t\t\t\t15 text 07:00 · On\n\t\t\t\t16 container\n\t\t\t\t\t17 button Goals, 1\n\t\t\t\t\t\t18 text Goals\n\t\t\t\t\t\t19 text 1\n\t\t\t\t20 container\n\t\t\t\t\t21 button Moments, 0\n\t\t\t\t\t\t22 text Moments\n\t\t\t\t\t\t23 text 0\n\t\t\t\t24 button Place sound, Sea\n\t\t\t\t\t25 text Place sound\n\t\t\t\t\t26 text Sea\n\t\t\t\t27 container\n\t\t\t\t\t28 button Partner, Not paired\n\t\t\t\t\t\t29 text Partner\n\t\t\t\t\t\t30 text Not paired\n\t\t\t\t31 button Your people, Clinic on\n\t\t\t\t\t32 text Your people\n\t\t\t\t\t33 text Clinic on\n\t\t\t\t34 button Help\n\t\t\t\t\t35 text Help\n\nThe focused UI element is 1 AXWebArea Aamu, URL: localhost:8082/preview?scene=settings&time=07:30"
+    },
+    {
+      "time": "21:00",
+      "scenario": "night",
+      "path": "/Users/kunalkarki/Documents/junction-proj/review/screenshots/home-u27/2100-night.jpg",
+      "state": "Browser tab: 7, Title: \"Aamu\", URL: \"http://localhost:8082/preview?scene=home&time=21:00&scenario=night\".\n1 AXWebArea Aamu, URL: localhost:8082/preview?scene=home&time=21:00&scenario=night\n\t2 container root\n\t\t3 container\n\t\t\t4 image\n\t\t\t5 image\n\t\t\t6 image\n\t\t\t7 container\n\t\t\t\t8 text aamu\n\t\t\t\t9 text Demo\n\t\t\t\t10 button Help\n\t\t\t\t\t11 text Help\n\t\t\t\t12 button Settings\n\t\t\t\t\t13 text Settings\n\t\t\t14 container\n\t\t\t\t15 text Alarm tomorrow 07:00 Sleep well\n\nThe focused UI element is 1 AXWebArea Aamu, URL: localhost:8082/preview?scene=home&time=21:00&scenario=night"
+    },
+    {
+      "time": "21:00",
+      "scenario": "early",
+      "path": "/Users/kunalkarki/Documents/junction-proj/review/screenshots/home-u27/2100-early.jpg",
+      "state": "Browser tab: 7, Title: \"Aamu\", URL: \"http://localhost:8082/preview?scene=home&time=21:00&scenario=early\".\n1 AXWebArea Aamu, URL: localhost:8082/preview?scene=home&time=21:00&scenario=early\n\t2 container root\n\t\t3 container\n\t\t\t4 image\n\t\t\t5 image\n\t\t\t6 image\n\t\t\t7 container\n\t\t\t\t8 text aamu\n\t\t\t\t9 text Demo\n\t\t\t\t10 button Help\n\t\t\t\t\t11 text Help\n\t\t\t\t12 button Settings\n\t\t\t\t\t13 text Settings\n\t\t\t14 container\n\t\t\t\t15 text Alarm at 07:00\n\t\t\t\t16 button I’m already up\n\t\t\t\t\t17 text I’m already up\n\nThe focused UI element is 1 AXWebArea Aamu, URL: localhost:8082/preview?scene=home&time=21:00&scenario=early"
+    },
+    {
+      "time": "21:00",
+      "scenario": "up",
+      "path": "/Users/kunalkarki/Documents/junction-proj/review/screenshots/home-u27/2100-up.jpg",
+      "state": "Browser tab: 7, Title: \"Aamu\", URL: \"http://localhost:8082/preview?scene=home&time=21:00&scenario=up\".\n1 AXWebArea Aamu, URL: localhost:8082/preview?scene=home&time=21:00&scenario=up\n\t2 container root\n\t\t3 container\n\t\t\t4 image\n\t\t\t5 image\n\t\t\t6 image\n\t\t\t7 container\n\t\t\t\t8 text aamu\n\t\t\t\t9 text Demo\n\t\t\t\t10 button Help\n\t\t\t\t\t11 text Help\n\t\t\t\t12 button Settings\n\t\t\t\t\t13 text Settings\n\t\t\t14 container\n\t\t\t\t15 text You got up today.\n\t\t\t\t16 text Your partner isn’t up yet.\n\t\t\t\t17 text Today’s step · Tiny\n\t\t\t\t18 text Read one page by the window.\n\t\t\t\t19 button Done\n\t\t\t\t\t20 text Done\n\t\t\t\t21 button Too much today\n\t\t\t\t\t22 text Too much today\n\nThe focused UI element is 1 AXWebArea Aamu, URL: localhost:8082/preview?scene=home&time=21:00&scenario=up"
+    },
+    {
+      "time": "21:00",
+      "scenario": "evening",
+      "path": "/Users/kunalkarki/Documents/junction-proj/review/screenshots/home-u27/2100-evening.jpg",
+      "state": "Browser tab: 7, Title: \"Aamu\", URL: \"http://localhost:8082/preview?scene=home&time=21:00&scenario=evening\".\n1 AXWebArea Aamu, URL: localhost:8082/preview?scene=home&time=21:00&scenario=evening\n\t2 container root\n\t\t3 container\n\t\t\t4 image\n\t\t\t5 image\n\t\t\t6 image\n\t\t\t7 container\n\t\t\t\t8 text aamu\n\t\t\t\t9 text Demo\n\t\t\t\t10 button Help\n\t\t\t\t\t11 text Help\n\t\t\t\t12 button Settings\n\t\t\t\t\t13 text Settings\n\t\t\t14 container\n\t\t\t\t15 text You both got up today.\n\t\t\t\t16 text Did you get to it?\n\t\t\t\t17 text Read one page by the window.\n\t\t\t\t18 button Yes\n\t\t\t\t\t19 text Yes\n\t\t\t\t20 button Not today\n\t\t\t\t\t21 text Not today\n\nThe focused UI element is 1 AXWebArea Aamu, URL: localhost:8082/preview?scene=home&time=21:00&scenario=evening"
+    },
+    {
+      "time": "21:00",
+      "scenario": "off",
+      "path": "/Users/kunalkarki/Documents/junction-proj/review/screenshots/home-u27/2100-off.jpg",
+      "state": "Browser tab: 7, Title: \"Aamu\", URL: \"http://localhost:8082/preview?scene=home&time=21:00&scenario=off\".\n1 AXWebArea Aamu, URL: localhost:8082/preview?scene=home&time=21:00&scenario=off\n\t2 container root\n\t\t3 container\n\t\t\t4 image\n\t\t\t5 image\n\t\t\t6 image\n\t\t\t7 container\n\t\t\t\t8 text aamu\n\t\t\t\t9 text Demo\n\t\t\t\t10 button Help\n\t\t\t\t\t11 text Help\n\t\t\t\t12 button Settings\n\t\t\t\t\t13 text Settings\n\t\t\t14 container\n\t\t\t\t15 text Alarm is off today.\n\t\t\t\t16 button Turn alarm on\n\t\t\t\t\t17 text Turn alarm on\n\nThe focused UI element is 1 AXWebArea Aamu, URL: localhost:8082/preview?scene=home&time=21:00&scenario=off"
+    },
+    {
+      "time": "21:00",
+      "scenario": "settings",
+      "path": "/Users/kunalkarki/Documents/junction-proj/review/screenshots/home-u27/2100-settings.jpg",
+      "state": "Browser tab: 7, Title: \"Aamu\", URL: \"http://localhost:8082/preview?scene=settings&time=21:00\".\n1 AXWebArea Aamu, URL: localhost:8082/preview?scene=settings&time=21:00\n\t2 container root\n\t\t3 container\n\t\t\t4 image\n\t\t\t5 container\n\t\t\t\t6 button Back\n\t\t\t\t\t7 text ‹ Back\n\t\t\t\t8 text Demo\n\t\t\t9 container\n\t\t\t\t10 heading Settings, Value: 1\n\t\t\t\t\t11 text Settings\n\t\t\t\t12 container\n\t\t\t\t\t13 button Alarm, 07:00 · On\n\t\t\t\t\t\t14 text Alarm\n\t\t\t\t\t\t15 text 07:00 · On\n\t\t\t\t16 container\n\t\t\t\t\t17 button Goals, 1\n\t\t\t\t\t\t18 text Goals\n\t\t\t\t\t\t19 text 1\n\t\t\t\t20 container\n\t\t\t\t\t21 button Moments, 0\n\t\t\t\t\t\t22 text Moments\n\t\t\t\t\t\t23 text 0\n\t\t\t\t24 button Place sound, Sea\n\t\t\t\t\t25 text Place sound\n\t\t\t\t\t26 text Sea\n\t\t\t\t27 container\n\t\t\t\t\t28 button Partner, Not paired\n\t\t\t\t\t\t29 text Partner\n\t\t\t\t\t\t30 text Not paired\n\t\t\t\t31 button Your people, Clinic on\n\t\t\t\t\t32 text Your people\n\t\t\t\t\t33 text Clinic on\n\t\t\t\t34 button Help\n\t\t\t\t\t35 text Help\n\nThe focused UI element is 1 AXWebArea Aamu, URL: localhost:8082/preview?scene=settings&time=21:00"
+    }
+  ]
+}

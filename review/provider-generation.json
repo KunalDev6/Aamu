@@ -1,0 +1,16 @@
+{
+  "checkedAt": "2026-11-14T03:58:16Z",
+  "model": "gemma-4-31b-it",
+  "transport": "Google Gemini API OpenAI-compatible chat completions",
+  "httpStatus": 200,
+  "liveRequestDurationMs": 12983,
+  "validatedWith": "zod 4.6.7",
+  "validated": true,
+  "syntheticGoalOnly": true,
+  "systemRoleUsed": false,
+  "jsonModeUsed": false,
+  "probeRequests": 4,
+  "parserTests": { "passed": 5, "failed": 0 },
+  "formatFinding": "Response echoed the exact schema example and repeated an identical answer. Parser ignores the exact scaffold, deduplicates identical schema-valid payloads and rejects distinct alternatives. Earlier strict parsing did not accept the response format.",
+  "scope": "One synthetic ladder capability was verified. This is not a product goal endpoint, full safety-check integration, quota guarantee, Lyria generation test or two-phone demo pass. No request or response text is stored in this report."
+}

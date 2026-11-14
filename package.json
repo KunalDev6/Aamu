@@ -1,0 +1,9 @@
+{
+  "name": "aamu",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "npm --prefix api test",
+    "typecheck": "npm --prefix api run typecheck"
+  }
+}

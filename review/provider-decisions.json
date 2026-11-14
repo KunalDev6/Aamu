@@ -1,0 +1,10 @@
+{
+  "checkedAt": "2026-11-14T04:15:39.567Z",
+  "model": "gemini-decision-1",
+  "sdkVersion": "3.3.0",
+  "requests": 1,
+  "syntheticOnly": true,
+  "accessible": true,
+  "durationMs": 395,
+  "responseValidated": true
+}

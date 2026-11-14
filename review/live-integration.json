@@ -1,0 +1,19 @@
+{
+  "checkedAt": "2026-11-14T17:03:11.199Z",
+  "transport": "public HTTPS/WSS",
+  "checks": [
+    "verified PostgreSQL and Valkey health",
+    "unused pairing code has no expiry",
+    "real code pairs once and is consumed",
+    "public wake WebSocket delivers one idempotent event",
+    "polling retrieves wake with WebSocket disconnected",
+    "redaction survives stale goal and morning uploads",
+    "erase then clean re-add rejects stale morning text and accepts current snapshot text",
+    "verified PostgreSQL and Valkey health",
+    "pair survives API process restart with the same tokens"
+  ],
+  "physicalPhonesTested": false,
+  "syntheticRowsRemoved": true,
+  "restartedAt": "2026-11-14T17:05:26.864Z",
+  "restartCheckTransport": "public HTTPS/WSS"
+}

@@ -1,0 +1,11 @@
+{
+  "name": "aamu-clinic-local",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "start": "node scripts/serve.mjs",
+    "demo": "node scripts/build.mjs && node scripts/serve.mjs",
+    "test": "node --experimental-strip-types --test test/engine.test.ts test/*.test.mjs"
+  }
+}

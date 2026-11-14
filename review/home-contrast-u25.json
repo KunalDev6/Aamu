@@ -1,0 +1,265 @@
+{
+  "checkedAt": "2026-11-14T17:39:11.825Z",
+  "source": "src/theme.ts + mobile/src/ui.tsx",
+  "text": [
+    {
+      "name": "Primary on canvas",
+      "foreground": "textPrimary",
+      "background": "canvas",
+      "ratio": 15.631,
+      "minimum": 4.5,
+      "pass": true
+    },
+    {
+      "name": "Secondary on canvas",
+      "foreground": "textSecondary",
+      "background": "canvas",
+      "ratio": 9.924,
+      "minimum": 4.5,
+      "pass": true
+    },
+    {
+      "name": "Primary on protected surface",
+      "foreground": "textPrimary",
+      "background": "surfaceProtected",
+      "ratio": 14.59,
+      "minimum": 4.5,
+      "pass": true
+    },
+    {
+      "name": "Secondary on protected surface",
+      "foreground": "textSecondary",
+      "background": "surfaceProtected",
+      "ratio": 9.263,
+      "minimum": 4.5,
+      "pass": true
+    },
+    {
+      "name": "Primary on surface",
+      "foreground": "textPrimary",
+      "background": "surface",
+      "ratio": 13.59,
+      "minimum": 4.5,
+      "pass": true
+    },
+    {
+      "name": "Secondary on surface",
+      "foreground": "textSecondary",
+      "background": "surface",
+      "ratio": 8.628,
+      "minimum": 4.5,
+      "pass": true
+    },
+    {
+      "name": "Primary on raised surface",
+      "foreground": "textPrimary",
+      "background": "surfaceRaised",
+      "ratio": 11.747,
+      "minimum": 4.5,
+      "pass": true
+    },
+    {
+      "name": "Secondary on raised surface",
+      "foreground": "textSecondary",
+      "background": "surfaceRaised",
+      "ratio": 7.457,
+      "minimum": 4.5,
+      "pass": true
+    },
+    {
+      "name": "Pressed secondary action",
+      "foreground": "textPrimary",
+      "background": "lineQuiet",
+      "ratio": 8.181,
+      "minimum": 4.5,
+      "pass": true
+    },
+    {
+      "name": "Quiet action over hold fill",
+      "foreground": "textSecondary",
+      "background": "lineQuiet",
+      "ratio": 5.193,
+      "minimum": 4.5,
+      "pass": true
+    },
+    {
+      "name": "Disabled and loading actions",
+      "foreground": "textSecondary",
+      "background": "surfaceRaised",
+      "ratio": 7.457,
+      "minimum": 4.5,
+      "pass": true
+    },
+    {
+      "name": "Outlined quiet action",
+      "foreground": "textSecondary",
+      "background": "surfaceProtected",
+      "ratio": 9.263,
+      "minimum": 4.5,
+      "pass": true
+    },
+    {
+      "name": "Pressed outlined quiet action",
+      "foreground": "textSecondary",
+      "background": "surfaceRaised",
+      "ratio": 7.457,
+      "minimum": 4.5,
+      "pass": true
+    },
+    {
+      "name": "Primary action",
+      "foreground": "textOnAccent",
+      "background": "accent",
+      "ratio": 9.306,
+      "minimum": 4.5,
+      "pass": true
+    },
+    {
+      "name": "Pressed primary action",
+      "foreground": "textOnAccent",
+      "background": "accentPressed",
+      "ratio": 7.603,
+      "minimum": 4.5,
+      "pass": true
+    },
+    {
+      "name": "Hold fill",
+      "foreground": "textOnAccent",
+      "background": "accentLight",
+      "ratio": 11.215,
+      "minimum": 4.5,
+      "pass": true
+    },
+    {
+      "name": "Quiet accent text",
+      "foreground": "accent",
+      "background": "surfaceProtected",
+      "ratio": 9.718,
+      "minimum": 4.5,
+      "pass": true
+    }
+  ],
+  "buttons": [
+    {
+      "name": "Primary default",
+      "foreground": "textOnAccent",
+      "background": "accent",
+      "ratio": 9.306,
+      "minimum": 4.5,
+      "pass": true
+    },
+    {
+      "name": "Primary pressed",
+      "foreground": "textOnAccent",
+      "background": "accentPressed",
+      "ratio": 7.603,
+      "minimum": 4.5,
+      "pass": true
+    },
+    {
+      "name": "Primary hold fill",
+      "foreground": "textOnAccent",
+      "background": "accentLight",
+      "ratio": 11.215,
+      "minimum": 4.5,
+      "pass": true
+    },
+    {
+      "name": "Secondary default / Settings",
+      "foreground": "textPrimary",
+      "background": "surfaceRaised",
+      "ratio": 11.747,
+      "minimum": 4.5,
+      "pass": true
+    },
+    {
+      "name": "Secondary pressed / Settings",
+      "foreground": "textPrimary",
+      "background": "lineQuiet",
+      "ratio": 8.181,
+      "minimum": 4.5,
+      "pass": true
+    },
+    {
+      "name": "Quiet default / Help",
+      "foreground": "textSecondary",
+      "background": "surfaceProtected",
+      "ratio": 9.263,
+      "minimum": 4.5,
+      "pass": true
+    },
+    {
+      "name": "Quiet pressed / Help",
+      "foreground": "textSecondary",
+      "background": "surfaceRaised",
+      "ratio": 7.457,
+      "minimum": 4.5,
+      "pass": true
+    },
+    {
+      "name": "Every disabled or loading button",
+      "foreground": "textSecondary",
+      "background": "surfaceRaised",
+      "ratio": 7.457,
+      "minimum": 4.5,
+      "pass": true
+    }
+  ],
+  "outlines": [
+    {
+      "name": "Quiet outline",
+      "foreground": "lineVisible",
+      "background": "surfaceProtected",
+      "ratio": 5.816,
+      "minimum": 3,
+      "pass": true
+    },
+    {
+      "name": "Pressed or disabled quiet outline",
+      "foreground": "lineVisible",
+      "background": "surfaceRaised",
+      "ratio": 4.683,
+      "minimum": 3,
+      "pass": true
+    },
+    {
+      "name": "Secondary pressed outline",
+      "foreground": "lineVisible",
+      "background": "lineQuiet",
+      "ratio": 3.261,
+      "minimum": 3,
+      "pass": true
+    },
+    {
+      "name": "Outline against canvas",
+      "foreground": "lineVisible",
+      "background": "canvas",
+      "ratio": 6.231,
+      "minimum": 3,
+      "pass": true
+    }
+  ],
+  "clockScenes": [
+    {
+      "time": "07:00",
+      "progress": 0.75
+    },
+    {
+      "time": "18:00",
+      "progress": 0
+    },
+    {
+      "time": "19:30",
+      "progress": 0
+    },
+    {
+      "time": "19:33",
+      "progress": 0
+    }
+  ],
+  "dawnStages": "Text-bearing buttons/cards remain opaque protected surfaces throughout progress 0..1; no text is placed on the changing landscape.",
+  "settingsCheck": "All Settings secondary buttons use the shared PillButton without per-button color or opacity overrides.",
+  "visualScreenshotsVerified": true,
+  "visualEvidence": "review/screenshots/home-u25: actual HomeView, isolated fixed local clocks 07:00 and 19:30; browser render, not physical-phone verification",
+  "sunOutline": "Unconfirmed sun has no fill. It is visually inspected over the clock-driven landscape; it is not a text or button contrast check."
+}

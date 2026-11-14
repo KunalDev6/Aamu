@@ -1,0 +1,25 @@
+{
+  "checkedAt": "2026-11-14T21:04:43.438Z",
+  "syntheticOnly": true,
+  "model": "gemma-4-31b-it",
+  "durationMs": 2858,
+  "successfulLadder": true,
+  "source": "model",
+  "judgeSource": "decisions",
+  "serverDeadlineMs": 25000,
+  "automaticRetries": 0,
+  "stages": [
+    {
+      "stage": "initial_judge",
+      "completed": true
+    },
+    {
+      "stage": "writer",
+      "completed": true
+    },
+    {
+      "stage": "step_judge",
+      "completed": true
+    }
+  ]
+}

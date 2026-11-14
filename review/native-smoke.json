@@ -1,0 +1,43 @@
+{
+  "date": "2026-11-14",
+  "platform": "iPhone 18 Pro Max simulator, iOS 27.0",
+  "physicalDevice": false,
+  "interaction": "Native UI through Device Hub",
+  "checks": [
+    "Real synthetic goal request displayed an editable Tiny/Small/Full ladder; Approve saved it",
+    "Setup continued through optional messages, Sea place default, Partner and Your people",
+    "Missing AlarmKit permission blocked setup and offered Open Settings",
+    "After Alarms was enabled in Settings, Set alarm succeeded and requested local notification permission",
+    "Online setup completion opened Home",
+    "Early hold advanced to voice and microphone denial continued to the message stage",
+    "With no recorded messages, the offered Small step appeared without audio",
+    "Too much today reduced Small to Tiny",
+    "Home Done changed to Undo and Undo restored Done",
+    "The synthetic simulator alarm was turned off after the test"
+  ],
+  "scopedStoredStateBeforeCleanup": {
+    "localDate": "2026-11-14",
+    "utcOffsetMinutes": 120,
+    "scheduledLocalTime": "19:24",
+    "holdCompletedLocalTime": "19:09:56.277",
+    "minutesToUp": 0,
+    "minutesBeforeAlarm": 14,
+    "snoozeCount": 0,
+    "firstRingAt": null,
+    "voiceState": "unavailable",
+    "speechShare": null,
+    "speechOnsetMs": null,
+    "level": "easy",
+    "recomputedVoicePoints": 0,
+    "recomputedTotalPoints": 0,
+    "suppressedLocalDate": "2026-11-14",
+    "futureDailyPlanDates": ["2026-11-15", "2026-11-16", "2026-11-17", "2026-11-18", "2026-11-19", "2026-11-20", "2026-11-21"]
+  },
+  "limits": [
+    "The saved native journal contains historical occurrences, not an authoritative OS pending-alarm snapshot",
+    "The iOS simulator permission prompt failed; permission was enabled through Settings",
+    "No recorded audio, physical locked/closed ringing, or two-phone presentation acceptance was established",
+    "The synthetic goal and morning remain in the simulator for inspection; the alarm is disabled"
+  ],
+  "screenshot": "screenshots/native-smoke/home.png"
+}

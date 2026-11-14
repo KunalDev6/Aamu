@@ -1,0 +1,99 @@
+{
+  "checkedAt": "2026-11-14T17:16:35Z",
+  "scope": "Android ARM64 debug build, deterministic native tests, emulator installation/startup and packaged backup configuration. This is not device or full-flow acceptance.",
+  "toolchain": {
+    "node": "24.22.3, temporary cached executable; system Node unchanged",
+    "java": "Android Studio bundled JDK 25.0.3",
+    "gradle": "9.4.1",
+    "compileSdk": 37,
+    "targetSdk": 36,
+    "minSdk": 24,
+    "buildTools": "37.0.0",
+    "ndk": "27.1.12297006",
+    "prebuild": "Android only; iOS was not regenerated"
+  },
+  "build": {
+    "result": "passed",
+    "tasks": [":aamu-alarm:testDebugUnitTest", ":app:assembleDebug"],
+    "arguments": ["-PreactNativeArchitectures=arm64-v8a", "-Dorg.gradle.internal.http.socketTimeout=120000", "-Dorg.gradle.internal.http.connectionTimeout=30000", "--console=plain"],
+    "duration": "10m 56s",
+    "actionableTasks": 416,
+    "executed": 388,
+    "upToDate": 28,
+    "log": "/tmp/aamu-android-build.log",
+    "apk": "mobile/android/app/build/outputs/apk/debug/app-debug.apk",
+    "sha256": "0029bf2463c03cafb52d1e1480b32d1af1433b7099a01282c7433f7842a21030",
+    "applicationId": "com.aamu.recovery",
+    "architecture": "arm64-v8a",
+    "debugRequiresMetro": true,
+    "warnings": ["Deprecated pre-26 notification compatibility APIs", "Existing dependency and Gradle deprecation warnings"]
+  },
+  "nativeUnitTests": {
+    "result": "passed",
+    "count": 8,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "timestamp": "2026-11-14T17:13:18.474Z",
+    "coverage": "Daily future dates, early-hold suppression, DST gaps/repeats, timezone changes, leap/year boundaries and invalid times",
+    "report": "mobile/modules/aamu-alarm/android/build/test-results/testDebugUnitTest/TEST-expo.modules.aamualarm.AlarmCalendarTest.xml"
+  },
+  "emulator": {
+    "target": "emulator-5554",
+    "avd": "Medium_Phone_API_36.0",
+    "api": 36,
+    "architecture": "arm64-v8a",
+    "bootCompleted": true,
+    "install": "adb install -r returned Success",
+    "metroPortReverse": "tcp:8081 -> tcp:8081",
+    "startup": {
+      "activity": "com.aamu.recovery/.MainActivity",
+      "status": "ok",
+      "launchState": "COLD",
+      "totalTimeMs": 3113,
+      "resumedActivityConfirmed": true,
+      "javaScriptEntryObserved": "ReactNativeJS: Running main, fabric true",
+      "expoContextInitialized": true,
+      "observedJavaScriptExceptionOrNativeCrash": false,
+      "warnings": [
+        "ReactNoCrashSoftException: window focus arrived before the React context was ready; the context subsequently initialized and main ran",
+        "FirebaseApp had no default options and did not initialize; packaged Firebase automatic messaging and analytics flags are false",
+        "Existing React Native generated-setter and emulator graphics warnings"
+      ]
+    },
+    "visualUiVerified": false,
+    "uiLimitation": "CUA does not expose the standalone emulator window; no adb taps or alternative UI automation were substituted.",
+    "permissionsOrAlarmControlsExercised": false,
+    "alarmScheduledByThisSmokeTest": false
+  },
+  "packagedBackupConfiguration": {
+    "method": "aapt2 dump xmltree and dump resources on the built APK",
+    "allowBackup": false,
+    "fullBackupContent": "@xml/secure_store_backup_rules (0x7f140006)",
+    "dataExtractionRules": "@xml/secure_store_data_extraction_rules (0x7f140007)",
+    "legacyBackup": {"include": {"domain": "sharedpref", "path": "."}, "exclude": {"domain": "sharedpref", "path": "SecureStore"}},
+    "cloudBackup": {"include": {"domain": "sharedpref", "path": "."}, "exclude": {"domain": "sharedpref", "path": "SecureStore"}},
+    "deviceTransfer": {"include": {"domain": "sharedpref", "path": "."}, "exclude": {"domain": "sharedpref", "path": "SecureStore"}},
+    "interpretation": "Include-only shared preferences leave files/aamu-audio and app databases outside these backup/transfer domains. Alarm journal separately uses noBackupFilesDir.",
+    "actualBackupOrTransferTested": false,
+    "firebaseMessagingAutoInitEnabled": false,
+    "firebaseAnalyticsCollectionEnabled": false,
+    "alarmReceiverServiceAndActivityExported": false
+  },
+  "remainingAcceptance": [
+    "Android permission sequence and rendered app/native alarm UI",
+    "Locked, background and swiped-closed alarm delivery and audible output",
+    "Repeated five-minute snooze, Stop, app takeover and retained journal observations",
+    "Reboot after first unlock, timezone changes and native queue replenishment",
+    "Audio focus, interruption, muted output and OEM behavior",
+    "Actual backup/device transfer",
+    "Physical Android device and complete morning flow"
+  ],
+  "platformLimits": [
+    "Credential-protected state is restored after first unlock following reboot, not before it",
+    "Power-off, user force-stop, permission revocation and system/OEM restrictions can prevent delivery",
+    "Denied audio focus or output failure leaves visual controls; no successful sound output is fabricated",
+    "This debug artifact contains ARM64 only and requires the development Metro server"
+  ],
+  "dependencyChange": "JUnit 4.13.2 is test-only for native calendar checks; no npm, runtime SDK or cloud service was added."
+}

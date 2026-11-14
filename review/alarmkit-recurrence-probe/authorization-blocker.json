@@ -1,0 +1,15 @@
+{
+  "observedAtLocal": "2026-11-14 16:23:45 Europe/Helsinki",
+  "simulatorOS": "iOS 27.0",
+  "fixtureBundle": "com.aamu.recovery.recurrenceprobe",
+  "uiAction": "Allow probe alarms tapped through CUA",
+  "uiResult": "No permission prompt; app reported permission not granted",
+  "systemService": "mobiletimerd",
+  "rejectingService": "SpringBoard",
+  "errorDomain": "FBServiceClientAuthenticatorErrorDomain",
+  "errorCode": 13,
+  "missingSystemEntitlement": "com.apple.springboard.CFUserNotification",
+  "alarmKitResult": "Denial recorded for fixture bundle",
+  "scheduledStopProbeRan": false,
+  "source": "Local simulator system log; no app or system entitlement was modified"
+}

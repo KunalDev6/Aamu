@@ -1,0 +1,41 @@
+plugins {
+  id 'com.android.library'
+  id 'expo-module-gradle-plugin'
+}
+
+group = 'expo.modules.aamualarm'
+version = '0.1.0'
+
+android {
+  namespace 'expo.modules.aamualarm'
+  buildFeatures { resValues = true }
+  defaultConfig {
+    versionCode 1
+    versionName '0.1.0'
+  }
+}
+
+// Native alarm controls share the one source of visual tokens and bundled font.
+def workspace = file('../../../..')
+def palette = [:]
+(new File(workspace, 'src/theme.ts').text =~ /(\w+): '(#[A-Fa-f0-9]{6})'/).each { match ->
+  palette[match[1]] = match[2]
+}
+['canvas', 'surface', 'textPrimary', 'textSecondary', 'accent', 'textOnAccent'].each { key ->
+  if (!palette[key]) throw new GradleException("Missing Aamu theme token: ${key}")
+  android.defaultConfig.resValue 'color', "aamu_${key.replaceAll(/([A-Z])/, '_$1').toLowerCase()}", palette[key]
+}
+def nativeAssets = layout.buildDirectory.dir('generated/aamuAssets')
+tasks.register('copyAamuFont', Copy) {
+  from new File(workspace, 'review/assets/plus-jakarta-sans.ttf')
+  from new File(workspace, 'review/assets/OFL.txt')
+  into nativeAssets
+}
+// AGP 9 disallows Provider objects in SourceSet; the explicit preBuild dependency
+// below supplies ordering for this concrete generated asset directory.
+android.sourceSets.main.assets.srcDir(nativeAssets.get().asFile)
+tasks.named('preBuild').configure { dependsOn 'copyAamuFont' }
+
+dependencies {
+  testImplementation 'junit:junit:4.13.2'
+}

@@ -1,0 +1,216 @@
+{
+  "startedAt": "2026-11-14T04:16:24.212Z",
+  "status": "complete_reviewed",
+  "syntheticOnly": true,
+  "configuredModel": "gemma-4-31b-it",
+  "candidateModel": "gemma-4-26b-a4b-it",
+  "inventory": {
+    "checkedAt": "2026-11-14T04:16:24.171Z",
+    "source": "Authenticated Gemini API ListModels",
+    "pages": 1,
+    "totalModels": 64,
+    "gemma": [
+      {
+        "name": "models/gemma-4-26b-a4b-it",
+        "displayName": "Gemma 4 26B A4B IT",
+        "supportedGenerationMethods": [
+          "generateContent",
+          "countTokens"
+        ]
+      },
+      {
+        "name": "models/gemma-4-31b-it",
+        "displayName": "Gemma 4 31B IT",
+        "supportedGenerationMethods": [
+          "generateContent",
+          "countTokens"
+        ]
+      }
+    ],
+    "lyria": [
+      {
+        "name": "models/lyria-3-clip-preview",
+        "displayName": "Lyria 3 Clip Preview",
+        "supportedGenerationMethods": [
+          "generateContent",
+          "countTokens"
+        ]
+      },
+      {
+        "name": "models/lyria-3-pro-preview",
+        "displayName": "Lyria 3 Pro Preview",
+        "supportedGenerationMethods": [
+          "generateContent",
+          "countTokens"
+        ]
+      },
+      {
+        "name": "models/lyria-3.5",
+        "displayName": "Lyria 3.5",
+        "supportedGenerationMethods": [
+          "generateContent",
+          "countTokens"
+        ]
+      },
+      {
+        "name": "models/lyria-realtime-exp",
+        "displayName": "Lyria Realtime Experimental",
+        "supportedGenerationMethods": [
+          "bidiGenerateMusic"
+        ]
+      }
+    ],
+    "scope": "Models returned by this key. Listing does not prove generation quota or successful audio/text generation."
+  },
+  "methodology": {
+    "transport": "Google Gemini API OpenAI-compatible chat completions",
+    "temperature": 0.2,
+    "maxOutputTokens": 2048,
+    "timeoutMs": 25000,
+    "attemptsPerSample": 1,
+    "retries": 0,
+    "sequential": true,
+    "ordering": "Alternating models per goal; starter alternates for each next goal.",
+    "latency": "Successful requests: wall-clock start through complete JSON body, excluding inventory/local validation. Timeout durations are abort elapsed times censored at 25 seconds, not completed generation latency.",
+    "promptTemplate": "This is a synthetic model comparison, not a real user request.\nCreate three concrete, simple steps towards this sample goal: {SYNTHETIC_GOAL}.\nTiny: at most 2 minutes and doable at home. Small: at most 10 minutes. Full: at most 30 minutes.\nEach step is one observable action, starts with a verb, and is at most 60 characters.\nSpecify a short duration or a bounded quantity so the size can be assessed.\nUse plain language. Do not give medical advice. Do not include feelings, exclamation marks, or \"try to\".\nReturn only a JSON object with this exact shape: {\"steps\":{\"tiny\":\"...\",\"small\":\"...\",\"full\":\"...\"}}.\nDo not repeat the shape example. No markdown, explanation, or other fields.",
+    "systemRole": false,
+    "jsonMode": false
+  },
+  "samples": [
+    {
+      "sequence": 1,
+      "goalId": "swimming",
+      "goal": "Get back to swimming",
+      "model": "gemma-4-31b-it",
+      "attempt": 1,
+      "timeoutMs": 25000,
+      "httpStatus": null,
+      "durationMs": 25005,
+      "schemaValid": false,
+      "outcome": "timeout",
+      "steps": null,
+      "semanticReview": {
+        "status": "not assessable; no ladder returned before timeout",
+        "issues": []
+      }
+    },
+    {
+      "sequence": 2,
+      "goalId": "swimming",
+      "goal": "Get back to swimming",
+      "model": "gemma-4-26b-a4b-it",
+      "attempt": 1,
+      "timeoutMs": 25000,
+      "httpStatus": null,
+      "durationMs": 25002,
+      "schemaValid": false,
+      "outcome": "timeout",
+      "steps": null,
+      "semanticReview": {
+        "status": "not assessable; no ladder returned before timeout",
+        "issues": []
+      }
+    },
+    {
+      "sequence": 3,
+      "goalId": "reading",
+      "goal": "Read more books",
+      "model": "gemma-4-26b-a4b-it",
+      "attempt": 1,
+      "timeoutMs": 25000,
+      "httpStatus": null,
+      "durationMs": 25004,
+      "schemaValid": false,
+      "outcome": "timeout",
+      "steps": null,
+      "semanticReview": {
+        "status": "not assessable; no ladder returned before timeout",
+        "issues": []
+      }
+    },
+    {
+      "sequence": 4,
+      "goalId": "reading",
+      "goal": "Read more books",
+      "model": "gemma-4-31b-it",
+      "attempt": 1,
+      "timeoutMs": 25000,
+      "httpStatus": 200,
+      "durationMs": 15290,
+      "schemaValid": true,
+      "outcome": "schema_valid",
+      "steps": {
+        "tiny": "Read one page.",
+        "small": "Read for 10 minutes.",
+        "full": "Read for 30 minutes."
+      },
+      "semanticReview": {
+        "status": "concrete and home-doable, with a Tiny duration caveat",
+        "method": "Manual textual review of the synthetic output; no additional model call or real-world timing test.",
+        "issues": [
+          "Tiny is bounded by one page rather than two minutes; completing a page may exceed two minutes depending on the page and reader. Small and Full explicitly use 10 and 30 minutes."
+        ]
+      },
+      "finishReason": "stop"
+    },
+    {
+      "sequence": 5,
+      "goalId": "desk",
+      "goal": "Keep my desk tidy",
+      "model": "gemma-4-31b-it",
+      "attempt": 1,
+      "timeoutMs": 25000,
+      "httpStatus": null,
+      "durationMs": 25003,
+      "schemaValid": false,
+      "outcome": "timeout",
+      "steps": null,
+      "semanticReview": {
+        "status": "not assessable; no ladder returned before timeout",
+        "issues": []
+      }
+    },
+    {
+      "sequence": 6,
+      "goalId": "desk",
+      "goal": "Keep my desk tidy",
+      "model": "gemma-4-26b-a4b-it",
+      "attempt": 1,
+      "timeoutMs": 25000,
+      "httpStatus": null,
+      "durationMs": 25002,
+      "schemaValid": false,
+      "outcome": "timeout",
+      "steps": null,
+      "semanticReview": {
+        "status": "not assessable; no ladder returned before timeout",
+        "issues": []
+      }
+    }
+  ],
+  "decision": {
+    "configurationChanged": false,
+    "switchProposed": false,
+    "reason": "Do not switch on this evidence: the smaller Gemma timed out on all three attempts, and no result from either model arrived under five seconds. Keep the configured 31B unchanged. Five requested sample ladders could not be shown because their one allowed attempt timed out; none were invented or retried.",
+    "limits": "Three attempts per model at one point in time are not a stable performance benchmark or a guarantee. A timeout does not establish that the model can never generate a suitable ladder."
+  },
+  "finishedAt": "2026-11-14T04:18:44.544Z",
+  "summary": {
+    "gemma-4-31b-it": {
+      "attempts": 3,
+      "schemaValid": 1,
+      "timeouts": 2,
+      "returnedLatencyMs": [
+        15290
+      ],
+      "returnedUnderFiveSeconds": 0
+    },
+    "gemma-4-26b-a4b-it": {
+      "attempts": 3,
+      "schemaValid": 0,
+      "timeouts": 3,
+      "returnedLatencyMs": [],
+      "returnedUnderFiveSeconds": 0
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "controlAlertObserved" : false,
+  "controlDueAt" : "2026-11-14T14:32:25Z",
+  "dueAt" : "2026-11-14T14:32:00Z",
+  "errorCode" : 0,
+  "errorDomain" : "AlarmKitCore.Alarm.AlarmError",
+  "fixtureAlarmsRemoved" : true,
+  "osVersion" : "Version 27.0 (Build 24A434)",
+  "outcome" : "probe_error",
+  "relativeHour" : 16,
+  "relativeMinute" : 32,
+  "schema" : 1,
+  "simulatorOnly" : true,
+  "startedAt" : "2026-11-14T14:30:32Z",
+  "stateBeforeStop" : "scheduled",
+  "stopReturnedSuccessfully" : false,
+  "testAlertObserved" : false,
+  "utcOffsetMinutes" : 120
+}

@@ -1,0 +1,60 @@
+{
+  "expo": {
+    "name": "Aamu",
+    "slug": "aamu",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.aamu.recovery",
+      "infoPlist": {
+        "NSMicrophoneUsageDescription": "Aamu records your messages and morning voice sample on this phone. Audio is never uploaded.",
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    },
+    "android": {
+      "predictiveBackGestureEnabled": false,
+      "package": "com.aamu.recovery",
+      "allowBackup": false
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-font",
+      [
+        "expo-audio",
+        {
+          "microphonePermission": "Aamu records your messages and morning voice sample on this phone. Audio is never uploaded.",
+          "enableBackgroundPlayback": false,
+          "enableBackgroundRecording": false
+        }
+      ],
+      "expo-secure-store",
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "deploymentTarget": "26.0"
+          }
+        }
+      ],
+      "@react-native-community/datetimepicker",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Aamu shows a photo you choose during your morning. Photos stay on this phone.",
+          "cameraPermission": false,
+          "microphonePermission": "Aamu records your messages and morning voice sample on this phone. Audio is never uploaded."
+        }
+      ],
+      "./plugins/withAamuAlarm.cjs",
+      ["expo-notifications", { "enableRemoteNotifications": false, "enableBackgroundRemoteNotifications": false }],
+      "./plugins/withAamuLocalNotifications.cjs"
+    ],
+    "scheme": "aamu"
+  }
+}

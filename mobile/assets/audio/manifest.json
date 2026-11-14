@@ -1,0 +1,107 @@
+{
+  "verifiedOn": "2026-11-14",
+  "files": [
+    {
+      "file": "forest.m4a",
+      "bytes": 239748,
+      "sha256": "e75ef7a126a2bc7394522a3a0f2414fbb61c81ec816add2c4212fdf199035584",
+      "durationSeconds": 14.653991,
+      "streams": [
+        {
+          "codec_name": "aac",
+          "sample_rate": "44100",
+          "channels": 2
+        }
+      ]
+    },
+    {
+      "file": "sea.m4a",
+      "bytes": 182148,
+      "sha256": "d0e0a2a38766c98c08a8e71afc9b1fd7485a46587aa7776f4448db5f77aab09a",
+      "durationSeconds": 11.510998,
+      "streams": [
+        {
+          "codec_name": "aac",
+          "sample_rate": "44100",
+          "channels": 2
+        }
+      ]
+    },
+    {
+      "file": "sources/forest-source.ogg",
+      "bytes": 187686,
+      "sha256": "60d77abf548030e85abec22053a6392df91320718e26b93180f562b1bf7989ac",
+      "durationSeconds": 14.654694,
+      "streams": [
+        {
+          "codec_name": "vorbis",
+          "sample_rate": "44100",
+          "channels": 2
+        }
+      ],
+      "sourceUrl": "https://upload.wikimedia.org/wikipedia/commons/3/38/Birds_forest.ogg"
+    },
+    {
+      "file": "sources/sea-source-2.flac",
+      "bytes": 404529,
+      "sha256": "53b5c28c0edc36f049e77e65f2cf8a86135103328c44c1507c416e6469d18096",
+      "durationSeconds": 2.5,
+      "streams": [
+        {
+          "codec_name": "flac",
+          "sample_rate": "44100",
+          "channels": 2
+        }
+      ],
+      "sourceUrl": "https://opengameart.org/sites/default/files/wave_02_cc0-18363__jasinski__alkaibeach.flac"
+    },
+    {
+      "file": "sources/sea-source-3.flac",
+      "bytes": 367584,
+      "sha256": "fc795f95f352b354867d69a587daecb8815334e28e3b56a7798c5f3005349054",
+      "durationSeconds": 2.25,
+      "streams": [
+        {
+          "codec_name": "flac",
+          "sample_rate": "44100",
+          "channels": 2
+        }
+      ],
+      "sourceUrl": "https://opengameart.org/sites/default/files/wave_03_cc0-18363__jasinski__alkaibeach.flac"
+    },
+    {
+      "file": "sources/sea-source-4.flac",
+      "bytes": 591767,
+      "sha256": "3c490e736365fdd617ce8405470d8878fc6146d9a8dba448d622addb01cfff3b",
+      "durationSeconds": 3.510998,
+      "streams": [
+        {
+          "codec_name": "flac",
+          "sample_rate": "44100",
+          "channels": 2
+        }
+      ],
+      "sourceUrl": "https://opengameart.org/sites/default/files/wave_04_cc0-18363__jasinski__alkaibeach.flac"
+    },
+    {
+      "file": "sources/sea-source.flac",
+      "bytes": 626248,
+      "sha256": "fcfca178eca2eac536e8c2a4ed5cf8096e44c921acd587047b3d9f1d7845435c",
+      "durationSeconds": 4.0,
+      "streams": [
+        {
+          "codec_name": "flac",
+          "sample_rate": "44100",
+          "channels": 2
+        }
+      ],
+      "sourceUrl": "https://opengameart.org/sites/default/files/wave_01_cc0-18363__jasinski__alkaibeach.flac"
+    }
+  ],
+  "checks": {
+    "fullDecode": "passed",
+    "seaPeakDbfs": -11.3,
+    "forestPeakDbfs": -12.4,
+    "deviceListening": "pending"
+  }
+}

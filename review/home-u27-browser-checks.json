@@ -1,0 +1,63 @@
+{
+  "naturalEarly0730": "- generic: aamu\n- button \"Help\":\n  - generic: Help\n- button \"Settings\":\n  - generic: Settings\n- generic: Alarm tomorrow\n- generic: 07:00",
+  "naturalStep0730": "- generic: aamu\n- button \"Help\":\n  - generic: Help\n- button \"Settings\":\n  - generic: Settings\n- generic: You’re up.\n- generic: You’re both up.\n- generic: Today’s step · Tiny\n- generic: Read one page by the window.\n- button \"Done\":\n  - generic: Done\n- button \"Too much today\":\n  - generic: Too much today",
+  "naturalStep2100": "- generic: aamu\n- button \"Help\":\n  - generic: Help\n- button \"Settings\":\n  - generic: Settings\n- generic: You both got up today.\n- generic: Did you get to it?\n- generic: Read one page by the window.\n- button \"Yes\":\n  - generic: \"Yes\"\n- button \"Not today\":\n  - generic: Not today",
+  "motionStylesA": [
+    {
+      "duration": "8s",
+      "name": "r-animation-1uzzgs1",
+      "opacity": "0.703897",
+      "state": "running",
+      "transform": "none"
+    },
+    {
+      "duration": "28s",
+      "name": "r-animation-ezfvy9",
+      "opacity": "1",
+      "state": "running",
+      "transform": "matrix(1, 0, 0, 1, 5.43063, 0)"
+    },
+    {
+      "duration": "10s",
+      "name": "r-animation-1urzc1k",
+      "opacity": "0.519767",
+      "state": "running",
+      "transform": "matrix(0.989302, 0, 0, 0.989302, 0, 0)"
+    },
+    {
+      "duration": "12s",
+      "name": "r-animation-72sekk",
+      "opacity": "0.788988",
+      "state": "running",
+      "transform": "matrix(1, 0, 0, 1, 6.69167, 0)"
+    }
+  ],
+  "motionStylesB": [
+    {
+      "duration": "8s",
+      "name": "r-animation-1uzzgs1",
+      "opacity": "0.806676",
+      "transform": "none"
+    },
+    {
+      "duration": "28s",
+      "name": "r-animation-ezfvy9",
+      "opacity": "1",
+      "transform": "matrix(1, 0, 0, 1, 0.606538, 0)"
+    },
+    {
+      "duration": "10s",
+      "name": "r-animation-1urzc1k",
+      "opacity": "0.897889",
+      "transform": "matrix(1.03972, 0, 0, 1.03972, 0, 0)"
+    },
+    {
+      "duration": "12s",
+      "name": "r-animation-72sekk",
+      "opacity": "0.315708",
+      "transform": "matrix(1, 0, 0, 1, -6.56017, 0)"
+    }
+  ],
+  "reducedAnimationNames": [],
+  "reduceMotionVerification": "Review-only restriction uses the same disable gate; OS preference is never overridden. Physical OS preference toggle remains untested."
+}

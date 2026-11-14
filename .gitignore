@@ -1,0 +1,51 @@
+# Secrets and local machine configuration
+.env
+.env.*
+!.env.example
+!.env.*.example
+*.pem
+*.key
+*.p8
+*.p12
+*.pfx
+*.jks
+*.keystore
+*.mobileprovision
+.DS_Store
+.claude/
+.codex/
+
+# Dependencies, caches and generated builds
+node_modules/
+.expo/
+.gradle/
+.kotlin/
+.cxx/
+Pods/
+build/
+dist/
+web-build/
+coverage/
+*.tsbuildinfo
+*.log
+*.apk
+*.aab
+*.ipa
+*.xcarchive/
+*.dSYM/
+mobile/ios/
+mobile/android/
+
+# Local captured video/frames and generated review outputs
+review/recordings/
+review/generated/
+review/alarmkit-recurrence-probe/DerivedData/
+
+# Personal app data is never source material. Bundled nature sounds and the
+# licensed voice test fixture under mobile/assets and mobile/modules are source.
+recordings/
+personal-audio/
+*.sqlite
+*.sqlite-*
+*.db
+*.db-*
