@@ -4,8 +4,8 @@ import { AppText, Card, PillButton } from './ui';
 import { SceneScreen } from './SceneScreen';
 import { TextAction } from './TextAction';
 import { DemoLabel } from './demo/DemoLabel';
-import { demoText } from './demo/config';
 import { sizeLabels } from './store';
+import { doneLine } from './TodaySize';
 import { skyProgressForClock } from '../../src/theme';
 import { homeCopy, homePresentation } from '../../src/home/presentation';
 
@@ -16,6 +16,10 @@ export type HomeViewProps = {
   removalVisible?: boolean; hasMessage?: boolean; note?: React.ReactNode; alarmSetupNotice?: React.ReactNode;
   /** Demo mode only: one visible way to see a whole morning from Home. */
   onTryMorning?(): void;
+  /** Demo mode only: make the alarm go off now, as its own action. */
+  onRingAlarm?(): void;
+  /** Guided demo in progress: Ring alarm becomes the main action. */
+  touring?: boolean;
   /** Isolated review can only add a motion restriction, never override the OS. */
   simulateReducedMotion?: boolean;
   onSettings(): void; onHelp(): void; onEnableAlarm(): void; onEarlyHold(): void;
@@ -30,8 +34,11 @@ export function HomeView(props: HomeViewProps) {
   const waiting = resting || early;
   // Before the person's own hold, say in words what the sun is waiting for.
   const sunLine = !waiting ? null : model.partnerSunUp ? 'Your partner is up.' : 'The sun fills when you get up.';
-  const tryMorning = props.onTryMorning
-    ? <PillButton label={demoText('Try a morning · Demo', 'Try a morning')} variant="secondary" outlined onPress={props.onTryMorning} /> : null;
+  // Two separate presenter actions, in every Home state: restart at picking a goal, and ring the alarm.
+  const demoActions = props.onTryMorning || props.onRingAlarm ? <View style={styles.demoActions}>
+    {props.onTryMorning && <PillButton label="Start demo" variant="secondary" outlined style={styles.demoAction} onPress={props.onTryMorning} />}
+    {props.onRingAlarm && <PillButton label="Ring alarm" variant={props.touring ? 'primary' : 'secondary'} outlined={!props.touring} style={styles.demoAction} onPress={props.onRingAlarm} />}
+  </View> : null;
   const header = <View style={styles.header}>
     <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
       <AppText variant="caption" weight="medium">aamu</AppText><DemoLabel />
@@ -64,8 +71,8 @@ export function HomeView(props: HomeViewProps) {
     {step.done === null ? <>
       <PillButton label={evening ? 'Yes' : 'Done'} onPress={props.onDone} />
       <TextAction label={evening ? 'Not today' : 'Too much today'} onPress={evening ? props.onNotToday : props.onShrink} />
-    </> : <View style={styles.answered}>
-      <AppText tone="secondary">{step.done ? 'Done' : 'Not today'}</AppText>
+    </> : <View style={{ gap: 6 }}>
+      <AppText tone="secondary" accessibilityLiveRegion="polite">{step.done ? doneLine(step.size) : 'Not today. The next step stays small.'}</AppText>
       <TextAction label="Undo" onPress={props.onUndoDone} />
     </View>}
   </>;
@@ -85,11 +92,11 @@ export function HomeView(props: HomeViewProps) {
         {model.partnerLine && <AppText variant="caption" tone="secondary" align="center">{model.partnerLine}</AppText>}
       </>}
     </View>
+    <View style={styles.lower}>
     {(off || early) ? <View style={styles.plainActions}>
       {card}
       {props.notice && <AppText variant="caption" tone="secondary" accessibilityLiveRegion="polite">{props.notice}</AppText>}
       {props.alarmSetupNotice}
-      {early && tryMorning}
     </View> : !resting ? <Card tone="protected" style={styles.stateCard}>
       {card}
       {props.notice && <AppText variant="caption" tone="secondary" accessibilityLiveRegion="polite">{props.notice}</AppText>}
@@ -98,11 +105,16 @@ export function HomeView(props: HomeViewProps) {
         {props.hasMessage && <TextAction label="See your moment" onPress={props.onPlayMessage} />}
         {props.note}
       </>}
-    </Card> : props.alarmSetupNotice || tryMorning ? <View style={styles.plainActions}>{props.alarmSetupNotice}{tryMorning}</View> : null}
+    </Card> : props.alarmSetupNotice ? <View style={styles.plainActions}>{props.alarmSetupNotice}</View> : null}
+    {demoActions}
+    </View>
   </SceneScreen>;
 }
 const styles = StyleSheet.create({
   header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  lower: { gap: 18 },
+  demoActions: { flexDirection: 'row', gap: 12 },
+  demoAction: { flex: 1 },
   headerActions: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   content: { justifyContent: 'space-between', gap: 40, paddingTop: 28, paddingBottom: 20 },
   hero: { minHeight: 130, alignItems: 'center', justifyContent: 'center', gap: 8 },

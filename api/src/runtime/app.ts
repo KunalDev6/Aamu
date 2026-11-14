@@ -22,6 +22,19 @@ export async function createRuntimeApp(options: { service: GoalService; reposito
   const identities = new WeakMap<FastifyRequest, string>();
   app.setErrorHandler((_error, _request, reply) => reply.code(503).send({ error: 'service_unavailable' }));
   app.addHook('onRequest', async (_request, reply) => { reply.header('Cache-Control', 'no-store'); });
+  if (options.demo?.enabled) {
+    // Demo mode only: let the Expo web preview on this computer call the API from
+    // a browser. Requests still need the bearer token; no cookies are involved.
+    const localPreview = /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/;
+    app.addHook('onRequest', async (request, reply) => {
+      const origin = request.headers.origin;
+      if (typeof origin !== 'string' || !localPreview.test(origin)) return;
+      reply.header('Access-Control-Allow-Origin', origin).header('Vary', 'Origin')
+        .header('Access-Control-Allow-Headers', 'authorization, content-type')
+        .header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
+      if (request.method === 'OPTIONS') return reply.code(204).send();
+    });
+  }
   async function authorize(request: FastifyRequest): Promise<boolean> {
     if (identities.has(request)) return true;
     const header = request.headers.authorization;

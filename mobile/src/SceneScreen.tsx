@@ -16,6 +16,8 @@ export type SceneScreenProps = {
   partnerUp?: boolean;
   sunLabels?: boolean;
   sunriseProgress?: number;
+  /** Decorative layer above the landscape and below the text scrim. */
+  overlay?: React.ReactNode;
   header?: React.ReactNode;
   children?: React.ReactNode;
   contentStyle?: StyleProp<ViewStyle>;
@@ -28,7 +30,7 @@ export type SceneScreenProps = {
 export { sceneScrimMinimumOpacity } from '../../src/scene/visuals';
 
 /** Full-screen illustration, safe-area controls and scrollable bottom content. */
-export function SceneScreen({ progress, up, paired, partnerUp, sunLabels, sunriseProgress,
+export function SceneScreen({ progress, up, paired, partnerUp, sunLabels, sunriseProgress, overlay,
   header, children, contentStyle, footer, scroll = true, clearHorizon = false, simulateReducedMotion = false }: SceneScreenProps) {
   const scrimId = `scene-scrim-${useId().replace(/[^a-zA-Z0-9_-]/g, '')}`;
   const window = useWindowDimensions();
@@ -39,6 +41,7 @@ export function SceneScreen({ progress, up, paired, partnerUp, sunLabels, sunris
     if (measured > 0) setHeight(previous => previous === measured ? previous : measured);
   }}>
     <Landscape fullBleed simulateReducedMotion={simulateReducedMotion} progress={progress} up={up} paired={paired} partnerUp={partnerUp} sunLabels={sunLabels} sunriseProgress={sunriseProgress} />
+    {overlay ? <View pointerEvents="none" style={StyleSheet.absoluteFill} accessibilityElementsHidden importantForAccessibility="no-hide-descendants">{overlay}</View> : null}
     <View pointerEvents="none" style={StyleSheet.absoluteFill} accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
       <Svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none">
         <Defs><LinearGradient id={scrimId} x1="0" y1="0" x2="0" y2="1">

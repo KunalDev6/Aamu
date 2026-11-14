@@ -44,6 +44,8 @@ export type AppState = {
   goalSync?: { generation: number; pending: boolean; lastAllocatedRevision: number; acknowledgedRevision?: number };
   goalCounts?: Record<string, GoalCounts>;
   demoSeed?: { version: 1; seededAt: number; nativeAlarmSetupPending: boolean };
+  /** Goals made by the guided demo, so the next Start demo can clear them and begin again. */
+  demoTourGoalIds?: string[];
   clinicSharing?: { enabled: boolean; code: string; revision: number; syncedRevision?: number;
     syncPending: boolean; callbackRequestedAt?: number };
 };

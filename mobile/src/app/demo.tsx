@@ -9,6 +9,10 @@ import { demoEnabled, demoLabelsVisible, demoText } from '../demo/config';
 import { changeDemo, resetDemo, useDemoSession } from '../demo/store';
 import { DemoAmbience, DemoMessagePlayer, DemoSilentMoment } from '../demo/audio';
 import { MomentPhoto } from '../MomentPhoto';
+import { Rise, SunBloom, TodaySize, doneLine, type SizeChoice } from '../TodaySize';
+import { getCarrySize, scoreMorning, sizeForMorning } from '../../../shared/mornings/engine';
+import { advanceTour, endTour, useTour } from '../demo/tour';
+import { emptyDemoSession } from '../../../shared/demo/session';
 import { advanceDemoTime, completeDemoStep, currentDemoMorning, demoSky, demoTiming, finishDemoVoice, holdDemo,
   demoRemovalNoticeVisible, offerDemoStep, restDemoMessage, ringDemo, showDemoHome, shrinkDemoStep, snoozeDemo, undoDemoRemoval,
   type DemoLevelChoice } from '../../../shared/demo/session';
@@ -21,6 +25,7 @@ const choiceLabels: Record<DemoLevelChoice, string> = { sensed: 'Sensed from sno
 export default function Demo() {
   const real = useStore().state; // Read-only resources. This route never obtains the real store's update function.
   const { start } = useLocalSearchParams<{ start?: string }>(); const started = useRef(false);
+  const tour = useTour(); const guided = tour?.stage === 'easy' || tour?.stage === 'hard';
   const { session, ready, error } = useDemoSession(demoEnabled);
   const [controls, setControls] = useState(true); const [clock, setClock] = useState(Date.now);
   const [hold, setHold] = useState(0); const pressing = useRef<number | null>(null);
@@ -28,7 +33,7 @@ export default function Demo() {
   const selected = real.messages.find(message => message.id === morning?.messageId && !message.blocked && !session.restedMessageIds.includes(message.id));
   const onTick = useEffectEvent(() => {
     const now = Date.now(); setClock(now);
-    changeDemo(current => advanceDemoTime(current, real, now));
+    changeDemo(current => advanceDemoTime(current, real, now, Math.random));
     if (pressing.current !== null) {
       const amount = Math.min(1, (now - pressing.current) / demoTiming.holdMs); setHold(amount);
       if (amount >= 1) { pressing.current = null; changeDemo(current => holdDemo(current, real, now)); setHold(0); }
@@ -51,10 +56,46 @@ export default function Demo() {
     if (!ready || !demoEnabled || start !== '1' || started.current) return;
     started.current = true; startMorning();
   }, [ready, start]);
+  // Guided demo: a fresh demo history with the one goal just approved, a partner,
+  // and a carried size of Full so the easier morning shows the whole step.
+  const startGuided = useEffectEvent(() => {
+    changeDemo(() => ({ ...ringDemo({ ...emptyDemoSession(), fast: true, selectedLevel: 'sensed', paired: true,
+      onlyGoalId: tour?.goalId ?? null, initialCarry: 'full' }, Date.now(), localDate(), -new Date().getTimezoneOffset()), partnerUp: true }));
+    setControls(false); setHold(0);
+  });
+  // Arriving from Home's "Ring the alarm": the first guided morning starts the fresh
+  // history; the second rings the next day in the same history.
+  const ringGuidedNext = useEffectEvent(() => {
+    changeDemo(current => ({ ...ringDemo({ ...current, fast: true, selectedLevel: 'sensed' }, Date.now(), localDate(), -new Date().getTimezoneOffset()), partnerUp: true }));
+    setControls(false); setHold(0);
+  });
+  const beginGuided = useEffectEvent(() => { if (tour?.stage === 'easy') startGuided(); else ringGuidedNext(); });
+  useEffect(() => {
+    if (!ready || !demoEnabled || !guided || started.current) return;
+    started.current = true; beginGuided();
+  }, [ready, guided]);
   if (!demoEnabled) return <Redirect href="/settings" />;
   if (!ready) return <Screen><AppText>Opening Demo…</AppText></Screen>;
-  const ring = () => { changeDemo(current => ringDemo(current, Date.now(), localDate(), -new Date().getTimezoneOffset())); setControls(false); setHold(0); };
+  // In the guided demo the simulated partner is already up when each morning rings,
+  // so the person's own half is the only thing left to fill.
+  const ring = () => {
+    changeDemo(current => { const next = ringDemo(current, Date.now(), localDate(), -new Date().getTimezoneOffset()); return guided ? { ...next, partnerUp: true } : next; });
+    setControls(false); setHold(0);
+  };
+  // The guided demo shows the morning it stands for: the alarm time, plus five minutes per snooze.
+  const ringClock = new Date(clock);
+  if (guided && morning) ringClock.setHours(real.alarm?.hour ?? 7, (real.alarm?.minute ?? 0) + morning.snoozeCount * demoTiming.snoozeMinutes, 0, 0);
   const sensedPause = morning?.phase === 'voice' && morning.selectedLevel === 'sensed';
+  // The same rule that picked the size, recomputed for display from the demo record.
+  let choice: SizeChoice | undefined;
+  if (morning && morning.selectedLevel === 'sensed' && morning.upAt !== null && morning.level) {
+    const prior = session.history.filter(item => item.localDate !== morning.localDate);
+    const score = scoreMorning({ ...morning, level: null, voiceState: 'unavailable' }, prior);
+    const carry = getCarrySize(prior, session.initialCarry ?? 'small');
+    choice = { snoozePoints: score.snoozePoints, timingPoints: score.timingPoints, usualSnoozes: score.baselines.main.snoozeCount,
+      usualMinutes: score.baselines.main.minutesToUp, usualFromHistory: score.baselines.main.ready,
+      carry, limit: sizeForMorning(morning.level, 'full') ?? 'tiny' };
+  }
   // What the demo morning was scored from, in plain words. No level is shown before it exists.
   const sensedLevel = morning?.level === 'easy' || morning?.level === 'medium' || morning?.level === 'hard' ? morning.level : null;
   const summary = !morning ? demoText(`Demo morning ${session.history.length}`, '')
@@ -63,14 +104,17 @@ export default function Demo() {
         ? `Sensed · ${levelLabels[sensedLevel]} morning · ${morning.snoozeCount} ${morning.snoozeCount === 1 ? 'snooze' : 'snoozes'} · ${Math.max(1, Math.round(morning.minutesToUp))} min to get up`
         : demoText(`Demo morning ${session.history.length}${session.fast ? ' · Fast time' : ''}`, '');
   const header = <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}><AppText variant="label">{controls || demoLabelsVisible ? 'aamu · Demo' : 'aamu'}</AppText>
-    <TextAction label={controls || demoLabelsVisible ? 'Exit Demo' : 'Close'} onPress={() => router.replace(start === '1' ? '/home' : '/settings')} />
+    <TextAction label={controls || demoLabelsVisible ? 'Exit Demo' : 'Close'} onPress={() => { endTour(); router.replace(start === '1' || tour ? '/home' : '/settings'); }} />
   </View>;
   const footer = <TextAction label={controls ? 'Show morning' : demoText('Demo controls', 'Options')} disabled={controls && !morning} onPress={() => setControls(!controls)} />;
   const surface = (children: React.ReactNode) => controls
     ? <Screen scroll header={header} footer={footer}>{children}</Screen>
-    : <SceneScreen clearHorizon sunLabels progress={demoSky(morning, clock)} up={Boolean(morning?.upAt)} paired={session.paired} partnerUp={session.partnerUp}
-      sunriseProgress={morning?.upAt ? Math.min(1, (clock - morning.upAt) / demoTiming.finishSkyMs) : 0}
-      header={header} footer={footer}>{children}</SceneScreen>;
+    // The person's half fills with the hold itself, so the two seconds of holding
+    // are the animation. Letting go early empties it again; only a completed hold keeps it.
+    : <SceneScreen clearHorizon sunLabels progress={demoSky(morning, clock)} up={Boolean(morning?.upAt) || hold > 0} paired={session.paired} partnerUp={session.partnerUp}
+      sunriseProgress={morning?.upAt ? 1 : hold}
+      overlay={morning?.upAt ? <SunBloom key={morning.upAt} /> : undefined}
+      header={header} footer={guided ? undefined : footer}>{children}</SceneScreen>;
   return <>
     <DemoAmbience morning={morning} place={real.place} personalUri={real.placeClip?.uri} />
     {surface(<>
@@ -101,9 +145,12 @@ export default function Demo() {
       <TextAction label="Reset Demo" onPress={() => { pressing.current = null; resetDemo(); setHold(0); }} />
     </> : <>
       <View style={{ gap: 12 }}>
-        {summary ? <AppText variant="caption" tone="secondary">{summary}</AppText> : null}
-        {morning?.phase === 'dawn' && <AppText variant="clock" align="center">{new Date(clock).toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })}</AppText>}
+        {summary && !guided ? <AppText variant="caption" tone="secondary">{summary}</AppText> : null}
+        {morning?.phase === 'dawn' && <AppText variant="clock" align="center">{ringClock.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })}</AppText>}
+        {guided && session.partnerUp && (morning?.phase === 'dawn' || morning?.phase === 'snoozed')
+          && <AppText tone="secondary" align="center">Your partner is already up.</AppText>}
         {sensedPause && <AppText variant="title" weight="light" align="center">You’re up.</AppText>}
+        {sensedPause && session.partnerUp && <AppText tone="secondary" align="center">You’re both up.</AppText>}
         {(morning?.phase === 'message' || morning?.phase === 'home') && <AppText variant="title">{selected ? (selected.photoUri ? 'A moment you saved.' : 'No need to reply.') : 'You’re up.'}</AppText>}
       </View>
       <View style={{ gap: 16 }}>
@@ -130,19 +177,30 @@ export default function Demo() {
             : <DemoSilentMoment key={`${morning.localDate}:${selected.id}`} autoPlay={morning.phase === 'message'} notBefore={(morning.upAt ?? 0) + demoTiming.fadeMs}
               onStart={() => changeDemo(current => offerDemoStep(current, real))} onRest={() => changeDemo(current => restDemoMessage(current, real))} />}
         </Card>}
-        {morning.stepOffered && morning.stepSize && <Card>
+        {morning.stepOffered && morning.stepSize && <Rise><Card style={{ gap: 14 }}>
+          {sensedLevel && morning.selectedLevel === 'sensed' && morning.minutesToUp !== null
+            && <TodaySize size={morning.stepSize} level={sensedLevel} snoozes={morning.snoozeCount} minutes={morning.minutesToUp} choice={choice} />}
           <AppText variant="caption" tone="secondary">{sizeLabels[morning.stepSize]} · Up to {sizeMinutes[morning.stepSize]} min</AppText>
           <AppText variant="step">{morning.stepText}</AppText>
-          {morning.stepDone ? <TextAction label={homeCopy.undo} onPress={() => changeDemo(current => completeDemoStep(current, null))} />
+          {morning.stepDone ? <View style={{ gap: 6 }}>
+            <AppText accessibilityLiveRegion="polite">{doneLine(morning.stepSize)}</AppText>
+            <TextAction label={homeCopy.undo} onPress={() => changeDemo(current => completeDemoStep(current, null))} />
+          </View>
             : <><PillButton label="Done" onPress={() => changeDemo(current => completeDemoStep(current, true))} />
               <TextAction label="Too much today" onPress={() => changeDemo(current => shrinkDemoStep(current, Date.now()))} /></>}
-        </Card>}
+        </Card></Rise>}
         {demoRemovalNoticeVisible(morning, clock) && <Card><AppText tone="secondary">{homeCopy.removed}</AppText>
           <TextAction label={homeCopy.undo} onPress={() => changeDemo(current => undoDemoRemoval(current, Date.now()))} />
         </Card>}
         {!real.goals.some(goal => goal.approved) && <AppText tone="secondary">Add a goal in Aamu to include a step in Demo.</AppText>}
-        {morning.phase === 'message' && <PillButton label="Home" variant="secondary" outlined onPress={() => changeDemo(showDemoHome)} />}
-        <TextAction label="Partner gets up now" disabled={!session.paired} onPress={() => changeDemo(current => ({ ...current, partnerUp: true }))} />
+        {guided ? (morning.stepOffered || morning.stepRemoved) && <PillButton variant="secondary" outlined
+          label={tour?.stage === 'easy' ? 'Next morning' : 'Next'} onPress={() => {
+            if (tour?.stage === 'easy') { advanceTour('hard'); router.replace('/home'); }
+            else { advanceTour('clinic'); router.replace('/help'); }
+          }} /> : <>
+          {morning.phase === 'message' && <PillButton label="Home" variant="secondary" outlined onPress={() => changeDemo(showDemoHome)} />}
+          <TextAction label="Partner gets up now" disabled={!session.paired} onPress={() => changeDemo(current => ({ ...current, partnerUp: true }))} />
+        </>}
       </>}
       </View>
     </>}

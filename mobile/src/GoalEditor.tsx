@@ -1,4 +1,4 @@
-import React, { useEffect, useId, useSyncExternalStore } from 'react';
+import React, { useEffect, useId, useState, useSyncExternalStore } from 'react';
 import { View } from 'react-native';
 import { uuid } from 'expo';
 import { router } from 'expo-router';
@@ -12,9 +12,12 @@ import { approveGoal, beginGoalCheck, finishGoalCheck, type ApprovalPorts, type 
 import { createSuggestionsController } from '../../src/goals/suggestions';
 import { goalAdvisory, goalCopy, stepHintLine } from '../../src/goals/copy';
 import { LadderPlaceholder, LadderRung, ladderIntro } from './StepLadder';
+import { TextAction } from './TextAction';
+import { colors } from '../../src/theme';
 import { hasAnyIntentPhrase } from '../../shared/safety/checker.mjs';
 import type { Steps, StepSize, StepHints } from '../../api/src/goals/contracts';
 import type { HintResult, ShrinkResult } from '../../api/src/goals/service';
+type ShrinkSuccess = Extract<ShrinkResult, { steps: Steps }>;
 
 const sizes: StepSize[] = ['tiny', 'small', 'full'];
 const emptySteps = (): Steps => ({ tiny: '', small: '', full: '' });
@@ -211,6 +214,45 @@ function createSession(id: string, original: StoredGoal, store: Pick<Store, 'rea
   };
 }
 
+/** Starting points for someone who can't think of a goal. Choosing one fills the
+ * goal and finds its steps straight away; the person can still change both. */
+const goalIdeas = ['Get outside more', 'Call my friends more often', 'Cook real meals again',
+  'Move my body a little each day', 'Read more', 'Get back to a hobby I used to love'];
+function GoalIdeas({ onChoose }: { onChoose(goal: string): void }) {
+  const [open, setOpen] = useState(false);
+  if (!open) return <TextAction label="Not sure what to choose? See some ideas" onPress={() => setOpen(true)} />;
+  return <Card tone="protected" padding={20} style={{ gap: 12 }}>
+    <AppText variant="label">Some places to start</AppText>
+    <AppText tone="secondary">Pick one that feels a little bit true. You can change it afterwards.</AppText>
+    {goalIdeas.map(idea => <PillButton key={idea} label={idea} variant="secondary" outlined onPress={() => { setOpen(false); onChoose(idea); }} />)}
+    <TextAction label="Close" onPress={() => setOpen(false)} />
+  </Card>;
+}
+
+const durationNames = ['under 2 minutes', '2 to 10 minutes', '10 to 30 minutes', 'more than 30 minutes'];
+const verdictNames = { ok: 'a clear place to start', too_big: 'a big goal, so the steps are a starting point', too_vague: 'a broad goal, so the steps are a starting point' };
+/** Demo-mode only (the server omits these numbers otherwise): what each model contributed. */
+function ModelDetails({ details }: { details: NonNullable<ShrinkSuccess['underTheHood']> }) {
+  const [open, setOpen] = useState(false);
+  if (!open) return <TextAction label="How the AI checked these steps" onPress={() => setOpen(true)} />;
+  return <Card tone="protected" padding={20} style={{ gap: 12 }}>
+    <AppText variant="label">How the AI checked these steps</AppText>
+    <AppText tone="secondary">Gemini Decision sorted the goal into a kind of activity, which sets the research-based rules. Gemma wrote the three steps under those rules. Gemini Decision then estimated how long each step takes.</AppText>
+    <AppText tone="secondary">{`Goal: ${verdictNames[details.goalVerdict]}.`}</AppText>
+    {details.durationProbabilities && sizes.map(size => {
+      const odds = details.durationProbabilities![size]; const best = odds.indexOf(Math.max(...odds));
+      return <View key={size} style={{ gap: 6 }}>
+        <AppText variant="caption">{`${sizeLabels[size]}: most likely ${durationNames[best]} (${Math.round(odds[best] * 100)}%)`}</AppText>
+        <View style={{ flexDirection: 'row', gap: 4, height: 8 }} accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
+          {odds.map((value, index) => <View key={index} style={{ flex: Math.max(0.02, value), borderRadius: 4,
+            backgroundColor: index === best ? colors.textSecondary : colors.lineQuiet }} />)}
+        </View>
+      </View>;
+    })}
+    <TextAction label="Hide" onPress={() => setOpen(false)} />
+  </Card>;
+}
+
 export function GoalEditor({ onApproved, goalId }: { onApproved: () => void; goalId?: string }) {
   const store = useStore();
   const binding = useId();
@@ -264,6 +306,7 @@ export function GoalEditor({ onApproved, goalId }: { onApproved: () => void; goa
       ? <PillButton label="Suggest steps again" variant="quiet" outlined disabled={!view.goalText.trim()} onPress={() => { void editor.runCheck(); }} />
       : <View style={{ gap: 12 }}>
         <PillButton label="Find my steps" disabled={!view.goalText.trim()} onPress={() => { void editor.runCheck(); }} />
+        <GoalIdeas onChoose={idea => { editor.changeTitle(idea); void editor.runCheck(); }} />
         <PillButton label="Write my own steps" variant="quiet" disabled={!view.goalText.trim()} onPress={editor.manual} />
       </View>) : null}
     {view.panel === 'ready' ? <Card>
@@ -290,6 +333,12 @@ export function GoalEditor({ onApproved, goalId }: { onApproved: () => void; goa
           onChangeText={text => editor.edit(size, text)} hint={stepHintLine(size, state.hints[size]) ?? undefined} />
       </LadderRung>)}</Card>
       <AppText variant="caption" tone="secondary">You can change any step. Finishing a step lets the next one grow a size.</AppText>
+      {view.editing === 'suggestions' && view.suggestions?.basis ? <Card tone="protected" padding={20} style={{ gap: 8 }}>
+        <AppText variant="label">Why these steps</AppText>
+        <AppText tone="secondary">{view.suggestions.basis.why}</AppText>
+        <AppText variant="caption" tone="secondary">{`Source: ${view.suggestions.basis.source}. General research, not personal medical advice.`}</AppText>
+      </Card> : null}
+      {view.editing === 'suggestions' && view.suggestions?.underTheHood ? <ModelDetails details={view.suggestions.underTheHood} /> : null}
       <PillButton label="Approve" disabled={!valid || state.saved} onPress={() => { void editor.approve(onApproved); }} />
     </View> : null}
     {state.saved ? <AppText accessibilityLiveRegion="polite" tone="secondary">Your steps are saved.</AppText> : null}

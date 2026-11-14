@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { goalConfig } from '../../../shared/goals/config.ts';
+import type { GoalDomain } from './evidence.ts';
 export { goalConfig } from '../../../shared/goals/config.ts';
 
 export const sizes = ['tiny', 'small', 'full'] as const;
@@ -19,7 +20,7 @@ export type StepHint = { exceedsSlot: boolean; needsConcreteAction: boolean };
 export type StepHints = Partial<Record<StepSize, StepHint>>;
 export type DurationProbabilities = Record<StepSize, [number, number, number, number]>;
 export type GoalJudgment =
-  | { kind: 'judged'; verdict: GoalVerdict }
+  | { kind: 'judged'; verdict: GoalVerdict; domain?: GoalDomain }
   | { kind: 'needs_support' }
   | { kind: 'unavailable' };
 export type StepJudgment =
@@ -35,6 +36,6 @@ export interface GoalJudge {
   judgeSteps(goalText: string, steps: Steps, signal: AbortSignal): Promise<StepJudgment>;
 }
 export interface GoalWriter {
-  write(goalText: string, signal: AbortSignal): Promise<Steps>;
+  write(goalText: string, signal: AbortSignal, domain?: GoalDomain): Promise<Steps>;
   judgeAndWrite(goalText: string, signal: AbortSignal): Promise<GemmaResult>;
 }

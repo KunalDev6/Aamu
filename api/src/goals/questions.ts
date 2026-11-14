@@ -18,6 +18,18 @@ export const goalQuestions = {
   },
 };
 
+// U34: the kind of activity decides which research-based writing rules apply.
+export const goalDomainQuestion = {
+  type: 'choice' as const,
+  instructions: 'Which kind of activity is this goal mostly about?',
+  criteria: {
+    movement: 'Physical exercise, sport, fitness, strength or moving the body.',
+    outdoors: 'Being outside, fresh air, nature, daylight or walking outdoors.',
+    social: 'Contact or time with other people, such as friends or family.',
+    other: 'Anything else, such as hobbies, household tasks, self-care, work, study or rest.',
+  },
+};
+
 const durationLevels = ['Under 2 minutes, at home', '2 to 10 minutes', '10 to 30 minutes', 'More than 30 minutes'];
 type StepQuestion =
   | { type: 'score'; instructions: string; criteria: string[] }

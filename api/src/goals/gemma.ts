@@ -1,6 +1,7 @@
 import { ladderSchema, fallbackSchema } from './contracts.ts';
 import type { GoalWriter } from './contracts.ts';
 import { parseModelObject } from './parse-model-object.mjs';
+import { goalEvidence, type GoalDomain } from './evidence.ts';
 
 type GemmaConfig = { apiKey: string; model: string; baseUrl: string; transport?: 'compatible' | 'native' };
 export class GoalModelFailure extends Error {
@@ -15,7 +16,7 @@ export function createGemmaWriter(config: GemmaConfig, fetcher: typeof fetch = f
   if (url.protocol !== 'https:' || url.hostname !== 'generativelanguage.googleapis.com') {
     throw new Error('Only the approved Gemini API destination is configured.');
   }
-  async function generate(goalText: string, withVerdict: boolean, signal: AbortSignal) {
+  async function generate(goalText: string, withVerdict: boolean, signal: AbortSignal, domain: GoalDomain = 'other') {
     signal.throwIfAborted();
     const scaffold = withVerdict ? { verdict: 'ok', steps: { tiny: '...', small: '...', full: '...' } } : { steps: { tiny: '...', small: '...', full: '...' } };
     // U32: each size is a smaller amount of the goal itself, never preparation
@@ -29,6 +30,8 @@ export function createGemmaWriter(config: GemmaConfig, fetcher: typeof fetch = f
       'Small takes at most 10 minutes. Full takes at most 30 minutes and is the goal done properly for one day.',
       'The three sizes are the same kind of activity, growing in amount. Include a number or duration where it is natural.',
       'For example, for reading more: Tiny is reading one page, Small is reading for ten minutes, Full is reading one chapter.',
+      'Say exactly what to do and how much or where, so the person has nothing left to decide.',
+      ...goalEvidence[domain].rules,
       'Each step is one concrete action another person could see, starts with a verb, uses plain words and contains at most 60 characters.',
       'Give no medical advice. Return JSON only, with no explanation or markdown.',
       withVerdict
@@ -59,7 +62,7 @@ export function createGemmaWriter(config: GemmaConfig, fetcher: typeof fetch = f
     catch { throw new GoalModelFailure('invalid_output'); }
   }
   return {
-    async write(goalText, signal) { return ladderSchema.parse(await generate(goalText, false, signal)).steps; },
+    async write(goalText, signal, domain) { return ladderSchema.parse(await generate(goalText, false, signal, domain)).steps; },
     async judgeAndWrite(goalText, signal) { return fallbackSchema.parse(await generate(goalText, true, signal)); },
   };
 }

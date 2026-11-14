@@ -7,6 +7,7 @@ import { colors } from '../../../src/theme';
 import { demoEnabled, demoText } from '../demo/config';
 import { safeContactAction } from '../demo/seed';
 import { askClinicToCall } from '../ClinicSyncCoordinator';
+import { endTour } from '../demo/tour';
 
 export default function Help() {
   const store = useStore(); const { safePerson } = store;
@@ -14,6 +15,7 @@ export default function Help() {
   const [breathing, setBreathing] = useState(false); const [elapsed, setElapsed] = useState(0);
   const [notice, setNotice] = useState(''); const [asking, setAsking] = useState(false);
   useEffect(() => { if (!breathing) return; const timer = setInterval(() => setElapsed(value => value + 1), 1000); return () => clearInterval(timer); }, [breathing]);
+  useEffect(() => { endTour(); }, []); // The guided demo finishes here.
   const inhale = elapsed % 10 < 4;
   function contact(action: 'call' | 'text') {
     if (!safePerson) return;

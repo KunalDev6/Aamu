@@ -11,10 +11,13 @@ import { homePresentation, removalNoticeVisible } from '../../../src/home/presen
 import { useAlarmControl } from '../useAlarmControl';
 import { DemoAlarmNotice } from '../demo/DemoAlarmNotice';
 import { demoEnabled } from '../demo/config';
+import { currentTour, startTour, useTour } from '../demo/tour';
+import { resetDemo } from '../demo/store';
+import { deleteGoal } from '../../../src/goals/settings';
 
 export default function Home() {
   const { state, update } = useStore();
-  const alarmControl = useAlarmControl(); const partner = usePartner();
+  const alarmControl = useAlarmControl(); const partner = usePartner(); const touring = Boolean(useTour());
   const [clock, setClock] = useState(Date.now);
   // Home's time-based copy changes on minute boundaries. Do not re-render an
   // idle landscape ten times a second or keep a timer while it is hidden.
@@ -45,13 +48,27 @@ export default function Home() {
   const stepText = today?.stepText ?? (today?.stepSize ? goal?.steps[today.stepSize] ?? today.stepLadder?.[today.stepSize] : undefined);
   return <HomeView now={clock} presentation={model} paired={partner.paired} alarmEnabled={Boolean(state.alarm?.enabled)}
     alarmBusy={alarmControl.busy} notice={alarmControl.notice}
-    alarmSetupNotice={state.demoSeed?.nativeAlarmSetupPending
+    touring={touring}
+    alarmSetupNotice={!touring && state.demoSeed?.nativeAlarmSetupPending
       ? <DemoAlarmNotice time={model.formattedAlarmTime ?? '07:00'} onSetup={() => router.push('/setup?step=3')} /> : undefined}
     step={today?.stepOffered && !today.stepRemoved && today.stepSize && stepText
       ? { size: today.stepSize, text: stepText, done: today.stepDone } : undefined}
     removalVisible={removalNoticeVisible(today, Boolean(state.alarm?.enabled), clock)}
     hasMessage={Boolean(today?.upAt && availableMessage)}
-    onTryMorning={demoEnabled ? () => router.push('/demo?start=1') : undefined}
+    onTryMorning={demoEnabled ? () => {
+      // Start demo always begins again at picking a goal: clear unfinished goals and
+      // the goals earlier demo runs made, and free a slot if all three are still taken.
+      update(old => {
+        const made = new Set(old.demoTourGoalIds ?? []);
+        let next = old.goals.filter(item => !item.approved || made.has(item.id)).reduce((state, item) => deleteGoal(state, item.id), old);
+        if (next.goals.length >= 3) next = deleteGoal(next, next.goals[next.goals.length - 1].id);
+        return { ...next, demoTourGoalIds: [] };
+      });
+      resetDemo(); startTour(); router.push('/goals?tour=1');
+    } : undefined}
+    // A separate action: during the guided demo it rings the next guided morning,
+    // otherwise an ordinary fast demo morning.
+    onRingAlarm={demoEnabled ? () => router.push(currentTour() ? '/demo?tour=1' : '/demo?start=1') : undefined}
     onSettings={() => router.push('/settings')} onHelp={() => router.push('/help')}
     onEnableAlarm={() => state.alarm ? void alarmControl.setEnabled(true) : router.push('/setup?step=3')}
     onEarlyHold={() => router.push('/alarm?kind=early')}

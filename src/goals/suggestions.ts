@@ -46,6 +46,7 @@ function copyResult(result: SuccessfulResult): SuccessfulResult {
     source: result.source,
     judgeSource: result.judgeSource,
     sizeHints: Object.fromEntries(Object.entries(result.sizeHints).map(([size, hint]) => [size, { ...hint }])),
+    ...(result.basis ? { basis: { ...result.basis } } : {}),
     ...(result.underTheHood ? {
       underTheHood: {
         goalVerdict: result.underTheHood.goalVerdict,

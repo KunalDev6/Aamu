@@ -1,4 +1,4 @@
-import { classifyUnconfirmed, dawnDuration, getCarrySize, scoreMorning, sizeForMorning, type MorningRecord } from '../mornings/engine.ts';
+import { classifyUnconfirmed, dawnDuration, getCarrySize, scoreMorning, sizeForMorning, type MorningRecord, type StepSize } from '../mornings/engine.ts';
 import { selectMessage, type MessageLevel, type MessageMetadata } from '../messages/engine.ts';
 import type { LocalGoal } from '../../src/goals/approval.ts';
 import type { Steps } from '../../api/src/goals/contracts.ts';
@@ -14,7 +14,9 @@ export type DemoMorning = MorningRecord & {
   stepLadder?: Steps; messageId: string | null; stepRemovalUndo?: StepRemovalUndo;
 };
 export type DemoSession = { version: 1; history: DemoMorning[]; fast: boolean; selectedLevel: DemoLevelChoice;
-  rotationGoalId: string | null; paired: boolean; partnerUp: boolean; callbackRequested: boolean; restedMessageIds: string[] };
+  rotationGoalId: string | null; paired: boolean; partnerUp: boolean; callbackRequested: boolean; restedMessageIds: string[];
+  /** Guided demo only: offer this one goal every morning, and start from this carried size. */
+  onlyGoalId?: string | null; initialCarry?: StepSize };
 export type DemoResources = { goals: readonly LocalGoal[]; messages: readonly MessageMetadata[] };
 // Fast time: a snooze re-rings after eight seconds and still counts as the
 // five minutes it stands for; ringing time counts twelvefold (10 s ≈ 2 min).
@@ -66,16 +68,17 @@ export function offerDemoStep(session: DemoSession, resources: DemoResources): D
   const morning = currentDemoMorning(session);
   if (!morning || morning.upAt === null || !morning.level || morning.stepOffered) return session;
   const goals = resources.goals.filter(goal => goal.approved); if (!goals.length) return session;
-  const index = Math.max(0, goals.findIndex(goal => goal.id === session.rotationGoalId)); const goal = goals[index];
-  const size = sizeForMorning(morning.level, getCarrySize(session.history.slice(0, -1))); if (!size) return session;
+  const only = session.onlyGoalId ? goals.findIndex(goal => goal.id === session.onlyGoalId) : -1;
+  const index = only >= 0 ? only : Math.max(0, goals.findIndex(goal => goal.id === session.rotationGoalId)); const goal = goals[index];
+  const size = sizeForMorning(morning.level, getCarrySize(session.history.slice(0, -1), session.initialCarry ?? 'small')); if (!size) return session;
   return { ...replace(session, { ...morning, goalId: goal.id, stepSize: size, stepText: goal.steps[size], stepLadder: { ...goal.steps }, stepOffered: true }),
-    rotationGoalId: goals[(index + 1) % goals.length].id };
+    rotationGoalId: only >= 0 ? session.rotationGoalId : goals[(index + 1) % goals.length].id };
 }
-export function finishDemoVoice(session: DemoSession, resources: DemoResources, skipped = false): DemoSession {
+export function finishDemoVoice(session: DemoSession, resources: DemoResources, skipped = false, random?: () => number): DemoSession {
   const morning = currentDemoMorning(session); if (!morning || morning.phase !== 'voice') return session;
   const eligible = resources.messages.filter(message => !session.restedMessageIds.includes(message.id));
   const level = demoLevel(session, morning);
-  const message = selectMessage(eligible, level, session.history.at(-2)?.messageId);
+  const message = selectMessage(eligible, level, session.history.at(-2)?.messageId, random);
   const next = replace(session, { ...morning, voiceState: skipped ? 'skipped' : null, phase: 'message',
     level, voiceEndsAt: undefined, messageId: message?.id ?? null });
   return message ? next : offerDemoStep(next, resources);
@@ -92,12 +95,12 @@ export function holdDemo(session: DemoSession, resources: DemoResources, now: nu
     voiceEndsAt: late ? undefined : now + pause, messageId: message?.id ?? null });
   return late ? offerDemoStep(next, resources) : next;
 }
-export function advanceDemoTime(session: DemoSession, resources: DemoResources, now: number): DemoSession {
+export function advanceDemoTime(session: DemoSession, resources: DemoResources, now: number, random?: () => number): DemoSession {
   const morning = currentDemoMorning(session); if (!morning) return session;
   if (morning.stepRemovalUndo && now >= morning.stepRemovalUndo.expiresAt) {
     return replace(session, { ...morning, stepRemovalUndo: undefined });
   }
-  if (morning.phase === 'voice' && now >= (morning.voiceEndsAt ?? Infinity)) return finishDemoVoice(session, resources);
+  if (morning.phase === 'voice' && now >= (morning.voiceEndsAt ?? Infinity)) return finishDemoVoice(session, resources, false, random);
   if (morning.phase === 'snoozed' && now >= (morning.snoozeUntil ?? Infinity)) return replace(session, resumed(morning, now));
   if (morning.upAt === null && morning.level === null) {
     const outcome = classifyUnconfirmed(morning.firstRingAt, now, [morning.scheduledAt], session.fast);

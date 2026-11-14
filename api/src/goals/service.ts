@@ -1,6 +1,7 @@
 import { hasAnyIntentPhrase } from '../../../shared/safety/checker.mjs';
 import { goalConfig } from './contracts.ts';
 import type { GoalJudge, GoalWriter, GoalVerdict, Steps, StepHints, DurationProbabilities } from './contracts.ts';
+import { goalBasis, type GoalBasis } from './evidence.ts';
 
 type JudgeSource = 'decisions' | 'gemma_fallback' | 'phrase_list';
 type Support = { verdict: 'needs_support'; steps: null; source: 'model'; judgeSource: JudgeSource };
@@ -8,6 +9,8 @@ type Failure = { verdict: null; steps: null; source: 'fallback'; error: 'suggest
 type Success = {
   verdict: GoalVerdict; steps: Steps; source: 'model'; judgeSource: JudgeSource;
   sizeHints: StepHints;
+  /** Fixed, pre-checked explanation of the research behind this kind of step. Never model-written. */
+  basis?: GoalBasis;
   // This property is omitted entirely outside the server-controlled demo mode.
   underTheHood?: { goalVerdict: GoalVerdict; durationProbabilities?: DurationProbabilities };
 };
@@ -52,17 +55,18 @@ export function createGoalService({ judge, writer, demoMode = false, timeoutMs =
           const fallback = await writer.judgeAndWrite(goalText, signal);
           signal.throwIfAborted();
           if (fallback.verdict === 'needs_support') return support('gemma_fallback');
-          return { ...fallback, source: 'model', judgeSource: 'gemma_fallback', sizeHints: {},
+          return { ...fallback, source: 'model', judgeSource: 'gemma_fallback', sizeHints: {}, basis: goalBasis('other'),
             ...(demoMode ? { underTheHood: { goalVerdict: fallback.verdict } } : {}) };
         }
-        const steps = await writer.write(goalText, signal);
+        const domain = initial.domain ?? 'other';
+        const steps = await writer.write(goalText, signal, domain);
         signal.throwIfAborted();
         const checked = await judge.judgeSteps(goalText, steps, signal);
         signal.throwIfAborted();
         if (checked.kind === 'blocked') return support('decisions');
         if (checked.kind === 'unavailable') return failure(); // U18: no unchecked ladder, no regeneration.
         return {
-          verdict: initial.verdict, steps, source: 'model', judgeSource: 'decisions', sizeHints: checked.sizeHints,
+          verdict: initial.verdict, steps, source: 'model', judgeSource: 'decisions', sizeHints: checked.sizeHints, basis: goalBasis(domain),
           ...(demoMode ? { underTheHood: { goalVerdict: initial.verdict, durationProbabilities: checked.durationProbabilities } } : {}),
         };
       }, failure, parent);

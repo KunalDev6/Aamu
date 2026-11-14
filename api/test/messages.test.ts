@@ -212,3 +212,36 @@ test('an already blocked recording earns neither play nor selected completion cr
   assert.equal(recordAudiblePlayback(messages, ledger, playback('a')).messages[0].timesPlayed, 0);
   assert.equal(setMessageCompletion(messages, ledger, true, today).messages[0].timesFollowedByDoneStep, 0);
 });
+
+test('Thompson sampling replaces only the scoring step and learns from finished steps', async () => {
+  const { betaDraw } = await import('../../shared/messages/engine.ts');
+  // Small seeded generator so the draws are repeatable.
+  const seeded = (seed: number) => () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; };
+  const clip = (id: string, timesPlayed: number, done: number, extra: Partial<MessageMetadata> = {}): MessageMetadata => ({
+    id, level: 'easy', blocked: false, createdAt: 1, lastPlayedAt: timesPlayed ? 1 : null, timesPlayed, timesFollowedByDoneStep: done, ...extra });
+
+  // Draws are valid rates, and more successes push them up.
+  const random = seeded(7);
+  const strong = Array.from({ length: 400 }, () => betaDraw(18, 2, random));
+  const weak = Array.from({ length: 400 }, () => betaDraw(2, 18, random));
+  assert.ok([...strong, ...weak].every(value => value > 0 && value < 1));
+  const mean = (values: number[]) => values.reduce((sum, value) => sum + value, 0) / values.length;
+  assert.ok(Math.abs(mean(strong) - 19 / 22) < 0.03); assert.ok(Math.abs(mean(weak) - 3 / 22) < 0.03);
+
+  // A proven moment wins most draws, but the weaker one is still tried sometimes.
+  const moments = [clip('proven', 20, 18), clip('weak', 20, 2)];
+  const pick = seeded(11); let proven = 0;
+  for (let index = 0; index < 500; index++) if (selectMessage(moments, 'easy', null, pick)?.id === 'proven') proven++;
+  assert.ok(proven > 480 && proven <= 500);
+  const close = [clip('a', 6, 3), clip('b', 6, 4)]; const pickClose = seeded(3); let a = 0;
+  for (let index = 0; index < 500; index++) if (selectMessage(close, 'easy', null, pickClose)?.id === 'a') a++;
+  assert.ok(a > 100 && a < 300); // Exploration: the slightly weaker moment keeps being chosen.
+
+  // Everything before the scoring step is unchanged by sampling.
+  assert.equal(selectMessage([clip('played', 9, 9), clip('new', 0, 0)], 'easy', null, seeded(1))?.id, 'new');
+  assert.equal(selectMessage([clip('yesterday', 9, 9), clip('other', 9, 0)], 'easy', 'yesterday', seeded(1))?.id, 'other');
+  assert.equal(selectMessage([clip('blocked', 9, 9, { blocked: true }), clip('gentler', 3, 0, { level: 'hard' })], 'easy', null, seeded(1))?.id, 'gentler');
+  assert.equal(selectMessage([clip('bright', 3, 3)], 'hard', null, seeded(1)), null); // Never a brighter level.
+  // Without a random source the fixed score still decides.
+  assert.equal(selectMessage(moments, 'easy')?.id, 'proven');
+});

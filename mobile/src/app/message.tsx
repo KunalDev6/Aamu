@@ -43,7 +43,7 @@ export default function Message() {
       const yesterday = new Date(Date.parse(`${date}T00:00:00Z`) - 86_400_000).toISOString().slice(0, 10);
       const prior = old.mornings.find(item => item.localDate === yesterday);
       const previousPlayed = prior?.messageLedger?.entries.find(entry => entry.playedAt !== null)?.messageId;
-      const message = selectMessage(old.messages, messageLevel(current.level), previousPlayed);
+      const message = selectMessage(old.messages, messageLevel(current.level), previousPlayed, Math.random);
       const next = replaceMorning(old, { ...current, messageId: message?.id ?? null, messageLedger: createMessageLedger(date, message?.id ?? null) });
       return message ? next : offerToday(next, date);
     });

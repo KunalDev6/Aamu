@@ -1,15 +1,28 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View } from 'react-native';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { AppText, Card, PillButton, Screen } from '../ui';
 import { GoalEditor } from '../GoalEditor';
 import { useStore } from '../store';
 import { deleteGoal, reorderGoals } from '../../../src/goals/settings';
 import { LadderRung, ladderSizes } from '../StepLadder';
+import { advanceTour } from '../demo/tour';
 
 export default function Goals() {
-  const { state, update } = useStore();
-  const [editing, setEditing] = useState<string | null>(null);
+  const { state, update, read } = useStore();
+  const touring = useLocalSearchParams<{ tour?: string }>().tour === '1';
+  const [approvedBefore] = useState(() => new Set(state.goals.filter(goal => goal.approved).map(goal => goal.id)));
+  const roomForGoal = state.goals.length < 3 || state.goals.some(goal => !goal.approved);
+  const [editing, setEditing] = useState<string | null>(touring && roomForGoal ? 'new' : null);
+  // Guided demo: the goal just approved becomes the one goal of both demo mornings.
+  const continueTour = useCallback(() => {
+    const goals = read().goals.filter(goal => goal.approved);
+    const created = goals.find(goal => !approvedBefore.has(goal.id)) ?? goals.at(-1);
+    if (created) update(old => ({ ...old, demoTourGoalIds: [...(old.demoTourGoalIds ?? []), created.id] }));
+    // Back to Home for the night: the alarm is rung with its own button.
+    advanceTour('easy', created?.id ?? null); router.replace('/how');
+  }, [read, update, approvedBefore]);
+  useEffect(() => { if (touring && !roomForGoal && editing === null) continueTour(); }, [touring, roomForGoal, editing, continueTour]);
   const [deleting, setDeleting] = useState<string | null>(null);
   const [notice, setNotice] = useState('');
   function move(id: string, direction: -1 | 1) {
@@ -28,7 +41,7 @@ export default function Goals() {
     setDeleting(null); setNotice('Goal deleted.');
   }
   if (editing !== null) return <Screen scroll header={<PillButton label="Back to goals" variant="quiet" onPress={() => setEditing(null)} />}>
-    <GoalEditor key={editing} goalId={editing === 'new' ? undefined : editing} onApproved={() => setNotice('Goal saved.')} />
+    <GoalEditor key={editing} goalId={editing === 'new' ? undefined : editing} onApproved={() => { if (touring) continueTour(); else setNotice('Goal saved.'); }} />
   </Screen>;
   return <Screen scroll header={<PillButton label="Back" variant="quiet" onPress={() => router.back()} />}>
     <AppText variant="title">Your goals</AppText>

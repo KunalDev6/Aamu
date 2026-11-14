@@ -64,10 +64,31 @@ function breakTie(left: MessageMetadata, right: MessageMetadata): number {
 }
 
 /** U16: level first, then yesterday exclusion, unplayed preference, score and ties. */
+/** Gamma(shape) for a whole-number shape, as the sum of that many exponential draws. */
+function gammaDraw(shape: number, random: () => number): number {
+  let total = 0;
+  for (let index = 0; index < shape; index++) total -= Math.log(1 - random() || Number.MIN_VALUE);
+  return total;
+}
+/** One draw from Beta(successes + 1, failures + 1): a plausible success rate given the evidence so far. */
+export function betaDraw(successes: number, failures: number, random: () => number): number {
+  const wins = gammaDraw(Math.min(500, Math.max(0, Math.floor(successes))) + 1, random);
+  const losses = gammaDraw(Math.min(500, Math.max(0, Math.floor(failures))) + 1, random);
+  return wins / (wins + losses);
+}
+
+/**
+ * Filtering, the unplayed-first rule and tie order never change. Without `random`
+ * the last step ranks by the fixed score (done + 1) / (played + 2). With `random`
+ * it is Thompson sampling (U16/U33): each moment draws a plausible "followed by a
+ * finished step" rate from its Beta posterior and the highest draw is chosen, so
+ * moments with little evidence still get tried and proven ones win more often.
+ */
 export function selectMessage<T extends MessageMetadata>(
   messages: readonly T[],
   level: MessageLevel,
   yesterdayPlayedMessageId: string | null = null,
+  random?: () => number,
 ): T | null {
   let eligible: T[] = [];
   for (const candidateLevel of fallbackLevels[level]) {
@@ -79,6 +100,11 @@ export function selectMessage<T extends MessageMetadata>(
   if (alternatives.length > 0) eligible = alternatives;
   const unplayed = eligible.filter(message => message.timesPlayed === 0);
   if (unplayed.length > 0) return unplayed.sort(breakTie)[0];
+  if (random) {
+    const draws = new Map(eligible.map(message => [message.id,
+      betaDraw(message.timesFollowedByDoneStep, message.timesPlayed - message.timesFollowedByDoneStep, random)]));
+    return eligible.sort((left, right) => draws.get(right.id)! - draws.get(left.id)! || breakTie(left, right))[0];
+  }
   return eligible.sort((left, right) => {
     const leftScore = (left.timesFollowedByDoneStep + 1) / (left.timesPlayed + 2);
     const rightScore = (right.timesFollowedByDoneStep + 1) / (right.timesPlayed + 2);

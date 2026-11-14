@@ -45,6 +45,8 @@ const farTrees = [[94, 257, 17, 8], [108, 257, 12, 6], [290, 256, 15, 7], [305, 
 const nearPines = nearTrees.map(([x, base, height, width]) => pine(x, base, height, width)).join('');
 const farPines = farTrees.map(([x, base, height, width]) => pine(x, base, height, width)).join('');
 
+/** Canvas units from the sun's base position: resting on the horizon, and fully risen. */
+export const sunRest = 26; export const sunHigh = -30;
 /** Dawn changes the sky only. The unlit sun stays outlined; warm fill requires confirmed up. */
 export function Landscape({
   progress, up, sunriseProgress = 1, paired = false, partnerUp = false, sunLabels = false, height = 410,
@@ -72,6 +74,10 @@ export function Landscape({
   // An already-confirmed partner keeps the shared sun raised while the person's
   // own half fills. Their state must not dim/replay during the person's hold.
   const sunrise = paired && partnerUp ? 1 : visibleSun ? ownSunrise : 1;
+  // U35: until the person is up the sun rests on the horizon, half behind the hills,
+  // whether or not a partner's half is lit. It climbs as the person's own half fills.
+  const ownProgress = up ? clampProgress(sunriseProgress) : 0;
+  const sunOffset = sunRest + (sunHigh - sunRest) * ownProgress;
   return (
     <View
       pointerEvents="none"
@@ -110,7 +116,7 @@ export function Landscape({
         </Svg>
       </MotionView>
       {visibleSun && <MotionView style={[styles.glow, {
-        left: (269 - 84) * scale - cropX, top: (sceneOffset + 183 + 56 * (1 - sunrise) - 84) * scale - cropY,
+        left: (269 - 84) * scale - cropX, top: (sceneOffset + 183 + sunOffset - 84) * scale - cropY,
         width: 168 * scale, height: 168 * scale, opacity: sunrise,
       }, motion.glow]}>
         <Svg width="100%" height="100%" viewBox="0 0 168 168">
@@ -140,7 +146,7 @@ export function Landscape({
           </LinearGradient>
         </Defs>
         <G transform={`translate(0 ${sceneOffset})`}>
-        <G transform={`translate(0 ${56 * (1 - sunrise)})`}>
+        <G transform={`translate(0 ${sunOffset})`}>
           {visibleSun && <Circle cx="269" cy="183" r="84" fill={fill('sun-glow')} opacity={sunrise} />}
           {paired ? (
             <G>

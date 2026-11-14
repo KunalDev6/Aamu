@@ -2,11 +2,13 @@ import { GoogleGenAI } from '@google/genai';
 import { z } from 'zod';
 import { goalConfig, sizes, goalVerdictSchema } from './contracts.ts';
 import type { GoalJudge, JudgeConfig, DurationProbabilities, StepHints, GoalJudgment, StepJudgment, Steps } from './contracts.ts';
-import { goalQuestions, stepQuestions } from './questions.ts';
+import { goalDomainQuestion, goalQuestions, stepQuestions } from './questions.ts';
+import { goalDomains } from './evidence.ts';
 
 const probability = z.number().finite().min(0).max(1);
 const noulSchema = z.object({ type: z.literal('noul'), noul: probability });
 const choiceSchema = z.object({ type: z.literal('choice'), choice: goalVerdictSchema, confidence: probability });
+const domainSchema = z.object({ type: z.literal('choice'), choice: z.enum(goalDomains) });
 const durationSchema = z.object({ type: z.literal('score'), probabilities: z.object({
   '0': probability, '1': probability, '2': probability, '3': probability,
 }) });
@@ -43,13 +45,18 @@ export function createGoalJudge(call: DecisionCall, config: JudgeConfig = goalCo
   return {
     async judgeGoal(goalText, signal): Promise<GoalJudgment> {
       try {
-        const result = await call({ model: 'gemini-decision-1', input: goalText, questions: goalQuestions }, signal);
+        // One request: the kind-of-activity question rides along and adds no extra call.
+        const result = await call({ model: 'gemini-decision-1', input: goalText,
+          questions: { ...goalQuestions, goal_domain: goalDomainQuestion } }, signal);
         const answers = z.object({ answers: z.record(z.string(), z.unknown()) }).parse(result).answers;
         // Distress probability exists only in this transient call scope. It is never a return field.
         const distress = noulSchema.parse(answers.distress);
         if (distress.noul >= config.distressThreshold) return { kind: 'needs_support' };
         const choice = choiceSchema.parse(answers.goal_verdict);
-        return { kind: 'judged', verdict: choice.confidence < config.choiceConfidenceThreshold ? 'ok' : choice.choice };
+        // Best effort: a missing or unexpected answer simply leaves the general rules in place.
+        const domain = domainSchema.safeParse(answers.goal_domain);
+        return { kind: 'judged', verdict: choice.confidence < config.choiceConfidenceThreshold ? 'ok' : choice.choice,
+          ...(domain.success ? { domain: domain.data.choice } : {}) };
       } catch (error) {
         return isSafetyBlock(error) ? { kind: 'needs_support' } : { kind: 'unavailable' };
       }
