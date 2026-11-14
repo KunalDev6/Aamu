@@ -4,6 +4,8 @@ import { createClinicProvider, prioritizeCallRequests } from './provider.js';
 import { createClinicPolling } from './polling.js';
 
 const app = document.querySelector('#app');
+const presenting = new URLSearchParams(location.search).get('present') === '1';
+if (presenting) document.documentElement.classList.add('presenting');
 const statuses = ['might_need_call', 'drifting', 'insufficient', 'steady'];
 const e = value => String(value).replace(/[&<>"']/g, character => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
@@ -63,17 +65,16 @@ function calculate(nextRecords) {
   if (!results.some(result => result.id === selectedId)) selectedId = results[0]?.id ?? null;
 }
 
-const presenting = new URLSearchParams(location.search).get('present') === '1';
-if (presenting) document.documentElement.classList.add('presenting');
-
 function renderShell() {
   app.innerHTML = `${brand()}<main id="overview" class="main">
     <header class="page-header"><div><span class="eyebrow">Recent mornings, in context</span><h1>Morning overview</h1>
       <p class="intro">See what has changed. Make space for a quiet conversation.</p></div>
       <div class="header-meta"><span class="demo-badge">Demo</span><span id="overview-date">${e(displayDate(asOf))}</span></div></header>
-    <div class="demo-notice"><p>Connected presenter records and fictional profiles.</p>
+    ${presenting ? `<div class="presentation-connection">
+      <p id="connection-status" class="connection-status">Connecting…</p>
+      <button class="text-button" id="refresh">Refresh</button></div>` : `<div class="demo-notice"><p>Connected presenter records and fictional profiles.</p>
       <button class="text-button" id="refresh">Refresh</button></div>
-    <p id="connection-status" class="connection-status">${presenting ? 'Connecting…' : 'Connecting to the demo clinic…'}</p>
+    <p id="connection-status" class="connection-status">Connecting to the demo clinic…</p>`}
     <section class="summary-grid" aria-label="Overview counts">${statuses.map(status => `<div class="summary-card" data-summary="${status}">
       <span class="summary-count">${results.filter(row => row.status === status).length}</span><span>${e(clinicLabels[status])}</span></div>`).join('')}</section>
     <section class="work-area" aria-label="Morning records"><div class="people-panel">

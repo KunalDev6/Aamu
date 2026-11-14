@@ -23,7 +23,7 @@ export type SizeChoice = {
   snoozePoints: number; timingPoints: number; usualSnoozes: number; usualMinutes: number;
   usualFromHistory: boolean; carry: Size; limit: Size;
 };
-const levelPoints = '0–1 points is an easier morning, 2 is in-between, 3 or more is hard.';
+const levelPoints = 'Fewer points mean getting up was easier: 0–1 is an easier morning, 2 is in-between, 3 or more is hard.';
 
 /** The exact rule that picked today's size, with this morning's numbers. Nothing here is a model output. */
 function ChoiceDetails({ choice, snoozes, minutes, level, size }: { choice: SizeChoice; snoozes: number; minutes: number; level: Level; size: Size }) {
@@ -36,11 +36,12 @@ function ChoiceDetails({ choice, snoozes, minutes, level, size }: { choice: Size
     [`${total} ${total === 1 ? 'point' : 'points'}`, mornings[level].replace('A', 'a').replace('An', 'an')],
   ];
   return <View style={styles.details}>
+    <AppText variant="label">Morning difficulty points</AppText>
     {rows.map(([left, right]) => <View key={left} style={styles.detailRow}>
       <AppText variant="caption">{left}</AppText><AppText variant="caption" tone="secondary">{right}</AppText>
     </View>)}
     <AppText variant="caption" tone="secondary">{levelPoints}</AppText>
-    <AppText variant="caption" tone="secondary">{`${mornings[level]} allows up to ${sizeLabels[choice.limit]}. Your steps had grown to ${sizeLabels[choice.carry]}. Today's step is the smaller of the two: ${sizeLabels[size]}.`}</AppText>
+    <AppText variant="caption" tone="secondary">{`${mornings[level]} allows up to ${sizeLabels[choice.limit]}. Step progression currently allows up to ${sizeLabels[choice.carry]}. Today's step is the smaller of the two: ${sizeLabels[size]}.`}</AppText>
     <AppText variant="caption" tone="secondary">{choice.usualFromHistory
       ? 'Your usual comes from your own first mornings.'
       : 'Until there are five mornings to learn your usual, Aamu starts from 0 snoozes and 8 minutes.'} These are starting values, not clinically validated.</AppText>
@@ -54,19 +55,19 @@ export function doneLine(size: Size): string {
     : `Done. Next time this goal comes up, the step can grow to ${sizeLabels[size === 'tiny' ? 'small' : 'full']}.`;
 }
 
-export function TodaySize({ size, level, snoozes, minutes, choice }: { size: Size; level: Level; snoozes: number; minutes: number; choice?: SizeChoice }) {
+export function TodaySize({ size, level, snoozes, minutes, choice, compact = false }: { size: Size; level: Level; snoozes: number; minutes: number; choice?: SizeChoice; compact?: boolean }) {
   const rounded = Math.max(1, Math.round(minutes));
   const noticed = snoozes === 0 ? `up in ${rounded} min, no snoozes` : `${snoozes} ${snoozes === 1 ? 'snooze' : 'snoozes'}, ${rounded} min to get up`;
   const which = size === 'tiny' ? 'the smallest of three' : size === 'small' ? 'the middle of three' : 'the biggest of three';
   return <View style={styles.block} accessible accessibilityLabel={`${mornings[level]}: ${noticed}. Today's step is ${sizeLabels[size]}, ${which}.`}>
     <AppText variant="caption" tone="secondary">{`${mornings[level]}: ${noticed}.`}</AppText>
-    <View style={styles.row}>
+    {!compact && <View style={styles.row}>
       <View style={styles.dots}>
         {sizes.map(item => <View key={item} style={[{ width: dot[item], height: dot[item], borderRadius: dot[item] / 2 },
           item === size ? styles.chosen : styles.other]} />)}
       </View>
       <AppText variant="caption" style={styles.sentence}>{`So today's step is ${sizeLabels[size]}, ${which}.`}</AppText>
-    </View>
+    </View>}
     {choice && <ChoiceDetails choice={choice} snoozes={snoozes} minutes={minutes} level={level} size={size} />}
   </View>;
 }

@@ -13,7 +13,8 @@ import { Rise, SunBloom, TodaySize, doneLine, type SizeChoice } from '../TodaySi
 import { getCarrySize, scoreMorning, sizeForMorning } from '../../../shared/mornings/engine';
 import { advanceTour, endTour, useTour } from '../demo/tour';
 import { emptyDemoSession } from '../../../shared/demo/session';
-import { advanceDemoTime, completeDemoStep, currentDemoMorning, demoSky, demoTiming, finishDemoVoice, holdDemo,
+import { ringHarderPresentationMorning } from '../demo/presentationScenario';
+import { advanceDemoTime, completeDemoStep, currentDemoMorning, demoMinutesToUp, demoSky, demoTiming, finishDemoVoice, holdDemo,
   demoRemovalNoticeVisible, offerDemoStep, restDemoMessage, ringDemo, showDemoHome, shrinkDemoStep, snoozeDemo, undoDemoRemoval,
   type DemoLevelChoice } from '../../../shared/demo/session';
 import type { MessageLevel } from '../../../shared/messages/engine';
@@ -65,10 +66,10 @@ export default function Demo() {
   });
   // Arriving from Home's "Ring the alarm": the first guided morning starts the fresh
   // history; the second rings the next day in the same history.
-  const ringGuidedNext = useEffectEvent(() => {
-    changeDemo(current => ({ ...ringDemo({ ...current, fast: true, selectedLevel: 'sensed' }, Date.now(), localDate(), -new Date().getTimezoneOffset()), partnerUp: true }));
+  function ringGuidedNext() {
+    changeDemo(current => ringHarderPresentationMorning(current, Date.now(), localDate(), -new Date().getTimezoneOffset()));
     setControls(false); setHold(0);
-  });
+  }
   const beginGuided = useEffectEvent(() => { if (tour?.stage === 'easy') startGuided(); else ringGuidedNext(); });
   useEffect(() => {
     if (!ready || !demoEnabled || !guided || started.current) return;
@@ -84,7 +85,8 @@ export default function Demo() {
   };
   // The guided demo shows the morning it stands for: the alarm time, plus five minutes per snooze.
   const ringClock = new Date(clock);
-  if (guided && morning) ringClock.setHours(real.alarm?.hour ?? 7, (real.alarm?.minute ?? 0) + morning.snoozeCount * demoTiming.snoozeMinutes, 0, 0);
+  if (guided && morning) ringClock.setHours(real.alarm?.hour ?? 7,
+    (real.alarm?.minute ?? 0) + Math.floor(morning.minutesToUp ?? demoMinutesToUp(morning, clock, session.fast)), 0, 0);
   const sensedPause = morning?.phase === 'voice' && morning.selectedLevel === 'sensed';
   // The same rule that picked the size, recomputed for display from the demo record.
   let choice: SizeChoice | undefined;
@@ -146,6 +148,8 @@ export default function Demo() {
     </> : <>
       <View style={{ gap: 12 }}>
         {summary && !guided ? <AppText variant="caption" tone="secondary">{summary}</AppText> : null}
+        {guided && tour?.stage === 'hard' && morning?.phase === 'dawn'
+          && <AppText variant="caption" tone="secondary" align="center">Another morning · two snoozes later</AppText>}
         {morning?.phase === 'dawn' && <AppText variant="clock" align="center">{ringClock.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })}</AppText>}
         {guided && session.partnerUp && (morning?.phase === 'dawn' || morning?.phase === 'snoozed')
           && <AppText tone="secondary" align="center">Your partner is already up.</AppText>}
@@ -178,10 +182,10 @@ export default function Demo() {
               onStart={() => changeDemo(current => offerDemoStep(current, real))} onRest={() => changeDemo(current => restDemoMessage(current, real))} />}
         </Card>}
         {morning.stepOffered && morning.stepSize && <Rise><Card style={{ gap: 14 }}>
-          {sensedLevel && morning.selectedLevel === 'sensed' && morning.minutesToUp !== null
-            && <TodaySize size={morning.stepSize} level={sensedLevel} snoozes={morning.snoozeCount} minutes={morning.minutesToUp} choice={choice} />}
-          <AppText variant="caption" tone="secondary">{sizeLabels[morning.stepSize]} · Up to {sizeMinutes[morning.stepSize]} min</AppText>
+          <AppText variant="caption" tone="secondary">Today’s step · {sizeLabels[morning.stepSize]} · Up to {sizeMinutes[morning.stepSize]} min</AppText>
           <AppText variant="step">{morning.stepText}</AppText>
+          {sensedLevel && morning.selectedLevel === 'sensed' && morning.minutesToUp !== null
+            && <TodaySize compact size={morning.stepSize} level={sensedLevel} snoozes={morning.snoozeCount} minutes={morning.minutesToUp} choice={choice} />}
           {morning.stepDone ? <View style={{ gap: 6 }}>
             <AppText accessibilityLiveRegion="polite">{doneLine(morning.stepSize)}</AppText>
             <TextAction label={homeCopy.undo} onPress={() => changeDemo(current => completeDemoStep(current, null))} />
@@ -194,8 +198,8 @@ export default function Demo() {
         </Card>}
         {!real.goals.some(goal => goal.approved) && <AppText tone="secondary">Add a goal in Aamu to include a step in Demo.</AppText>}
         {guided ? (morning.stepOffered || morning.stepRemoved) && <PillButton variant="secondary" outlined
-          label={tour?.stage === 'easy' ? 'Next morning' : 'Next'} onPress={() => {
-            if (tour?.stage === 'easy') { advanceTour('hard'); router.replace('/home'); }
+          label={tour?.stage === 'easy' ? 'Skip to a harder morning' : 'Ask for support'} onPress={() => {
+            if (tour?.stage === 'easy') { advanceTour('hard'); ringGuidedNext(); }
             else { advanceTour('clinic'); router.replace('/help'); }
           }} /> : <>
           {morning.phase === 'message' && <PillButton label="Home" variant="secondary" outlined onPress={() => changeDemo(showDemoHome)} />}

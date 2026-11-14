@@ -650,3 +650,13 @@ Source: `requirements/answers/u27.md`. Seven new pure model tests pass,34 Home t
 | HM-29 | USER U27 | Same five Home states plus Settings at 07:30/21:00, plus ten-second recording. | Deliver twelve updated labelled captures and motion recording; explain forced scenes; no native/physical claim from browser media. | Delivery pending. |
 
 Relevant command: `cd api && node --experimental-require-module --experimental-strip-types --test test/home.test.ts` —34 passed, zero failures at the pure-model checkpoint.
+
+
+## U37 verified checkpoint — 15 November 2026
+
+384 API/shared tests and 36 clinic tests pass with zero failures; API/mobile typechecks and full mobile lint pass. Browser-only rehearsal: generated synthetic goal → Approve → first Full step → explicit two-snooze cut → Tiny → Done → Help; anonymous simulated sun preview; real callback route → clinic first row with timestamp, retained after refresh. See review/presentation-review.md and review/screenshots/presentation-review/. These are not physical alarm/audio/two-phone results.
+
+
+## U38 navigation/copy verification
+
+Browser observed exactly one post-goal button, Select a partner; it opened the partner choices with Ring alarm as the next action. The existing morning's expanded explanation now labels Morning difficulty points and explains that fewer means easier; sizing logic is unchanged. Mobile typecheck and targeted lint pass. Screenshot: review/screenshots/presentation-review/select-partner-only.jpg.

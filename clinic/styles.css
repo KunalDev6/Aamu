@@ -150,3 +150,38 @@ input::placeholder { color: var(--text-secondary); opacity: 1; }
 
 /* Presenter view (?present=1): same data, without the demo wording. */
 .presenting .demo-badge, .presenting .demo-notice p, .presenting .page-footer { display: none; }
+
+/* Keep the communication itself in view during the desktop presentation. */
+.presenting .main { padding-top: 24px; }
+.presenting .page-header { gap: 16px; }
+.presenting h1 { font-size: clamp(30px, 3vw, 36px); margin-top: 4px; }
+.presenting .intro { font-size: 16px; margin-top: 6px; }
+.presenting .presentation-connection {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin: 8px 0 14px;
+}
+.presenting .presentation-connection .connection-status { margin: 0; }
+.presenting .presentation-connection .text-button {
+  flex: 0 0 auto;
+  padding: 8px 16px;
+  border: 1px solid var(--line-visible);
+  border-radius: 999px;
+}
+.presenting .summary-grid { gap: 12px; margin-bottom: 18px; }
+.presenting .summary-card {
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 20px;
+}
+.presenting .summary-count { font-size: 28px; }
+.presenting .summary-card > span:last-child { line-height: 1.4; }
+.presenting .panel-heading { margin-bottom: 10px; }
+.presenting .filters { margin-bottom: 14px; }
+.presenting input, .presenting select { min-height: 44px; padding-top: 8px; padding-bottom: 8px; }
+.presenting .list-heading { padding-bottom: 8px; }

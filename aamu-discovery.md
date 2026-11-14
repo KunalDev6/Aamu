@@ -773,3 +773,15 @@ Root observed the actual HomeView in an isolated, fixed-clock web preview at 07:
 ## U27 implementation checkpoint
 
 `homePresentation` adds `showSleepWell`, `heroTitle` and `partnerLine`, with copy centralized in `homeCopy`. Seven new tests pass (34 Home total), covering07:00 overnight boundaries, midnight-clipped01:00 early window, no Sleep well on off/confirmed/evening states, before-evening partner copy, single both-confirmed evening title, no fabricated both-confirmation and unchanged null-only evening windows. API/mobile typechecks pass at this checkpoint. No fixture override is accepted by the real resolver. Q113 is resolved: the paired own-only evening line explicitly retains truthful partner status. Other scene/layout/motion changes and new screenshot/recording evidence are in progress; no new full aggregate or native acceptance is claimed.
+
+
+## U37 — presentation review, 15 November 2026
+
+CONFIRMED: the user authorizes reviewing Claude's changes and making bounded fixes for a two-minute video, including clinic web preview, close-friend/family/anonymous partner choice and communication. Raw scope is in requirements/answers/u37.md. Implementation choices and remaining proposals are separated in review/presentation-review.md; they do not change the confirmed real sensing/privacy rules. Browser evidence now includes a real callback appearing at the top of the clinic. Guided partner/history remain simulated/isolated, and physical two-phone acceptance is pending.
+
+
+## U38 — single post-goal action
+
+CONFIRMED: the post-goal bridge has only Select a partner. Its direct Ring alarm bypass is removed; the guided partner screen now advances to the alarm instead of returning to the bridge. Pairing is not newly mandatory. Latest source publication to the existing GitHub repository is explicitly authorized, with secrets excluded. Source: requirements/answers/u38.md.
+
+U38 follow-up: the user asked why zero points can yield Full. Explained that points measure morning difficulty, and the offered size is the smaller of that morning's cap and progression. The guided demo starts at Full; real first-day carry remains Small. Copy clarified; no algorithm change requested or made.

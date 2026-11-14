@@ -12,6 +12,8 @@ import type { Steps } from '../../api/src/goals/contracts';
 import { uuid } from 'expo';
 import { demoEnabled } from './demo/config';
 import { demoSafePerson, demoSeedConfig, initialAppState } from './demo/seed';
+import { getDemoIdentityHash, subscribeDemoIdentity } from './api';
+import { reconcileDemoIdentity } from '../../shared/demo/identity-state';
 
 export type Clip = { id: string; uri: string; durationMs: number };
 /** A moment: a photo the person chose, with an optional recording of the sound around it.
@@ -44,6 +46,8 @@ export type AppState = {
   goalSync?: { generation: number; pending: boolean; lastAllocatedRevision: number; acknowledgedRevision?: number };
   goalCounts?: Record<string, GoalCounts>;
   demoSeed?: { version: 1; seededAt: number; nativeAlarmSetupPending: boolean };
+  /** Non-secret browser demo identity binding. Never an access token. */
+  demoIdentityHash?: string;
   /** Goals made by the guided demo, so the next Start demo can clear them and begin again. */
   demoTourGoalIds?: string[];
   clinicSharing?: { enabled: boolean; code: string; revision: number; syncedRevision?: number;
@@ -69,6 +73,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   const [safePerson, setSafePerson] = useState<Store['safePerson']>(null);
   useEffect(() => {
     let alive = true;
+    let unsubscribeIdentity = () => {};
     (async () => {
       try {
         if (Platform.OS === 'ios') await preparePrivateStorage();
@@ -76,7 +81,22 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         const parsed = initialAppState({ demo: demoEnabled, stored: stored ? JSON.parse(stored) as AppState : null,
           empty: emptyState, now: Date.now(), goalId: uuid.v4() });
         if (parsed.version !== 1 || !Array.isArray(parsed.goals) || !Array.isArray(parsed.mornings)) throw Error();
-        const restored = reconcileGoalCounts(recoverInterruptedGoalSync(parsed));
+        let restored = reconcileGoalCounts(recoverInterruptedGoalSync(parsed));
+        if (Platform.OS === 'web' && demoEnabled) {
+          // No network at load: a new tab/missing token invalidates old remote
+          // acknowledgements before Help can show a saved callback as confirmed.
+          restored = reconcileDemoIdentity(restored, await getDemoIdentityHash().catch(() => null));
+          if (!alive) return;
+          unsubscribeIdentity = subscribeDemoIdentity(hash => {
+            if (!alive) return;
+            const next = reconcileDemoIdentity(ref.current, hash);
+            if (next === ref.current) return;
+            ref.current = next; setState(next);
+            const serialized = JSON.stringify(next);
+            writes.current = writes.current.then(() => AsyncStorage.setItem(storageKey, serialized))
+              .then(() => setSaveError(false)).catch(() => setSaveError(true));
+          });
+        }
         // Commit the first seed before exposing Home, so relaunch cannot create
         // a second goal/date set. Normal storage is never read, reset or written.
         if (!stored && demoEnabled) await AsyncStorage.setItem(storageKey, JSON.stringify(restored));
@@ -96,7 +116,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         if (alive) setLoadError(true);
       } // Preserve unreadable storage; never silently reset it.
     })();
-    return () => { alive = false; };
+    return () => { alive = false; unsubscribeIdentity(); };
   }, [reload]);
   const read = useCallback(() => ref.current, []);
   const update = useCallback((change: (old: AppState) => AppState) => {

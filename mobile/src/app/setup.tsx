@@ -13,7 +13,8 @@ import { messageLabels, useStore, type MessageClip } from '../store';
 import { apiPost, checkConnection, ensureIdentity } from '../api';
 import { getAuthorization, requestAuthorization, scheduleDaily, nativeAlarmUnavailableReason } from '../../modules/aamu-alarm';
 import { requestEveningReminderPermission } from '../reminders/native';
-import { requestPartnerRefresh } from '../partner';
+import { requestPartnerRefresh, usePartner } from '../partner';
+import { PartnerSetup } from '../PartnerSetup';
 import { useAlarmControl } from '../useAlarmControl';
 import { colors } from '../../../src/theme';
 import { demoEnabled, demoText } from '../demo/config';
@@ -23,8 +24,9 @@ import { clinicSynchronizer } from '../ClinicSyncCoordinator';
 const titles = ['Goals', 'Moments', 'Place sound', 'Alarm', 'Partner', 'Your people'];
 export default function Setup() {
   const store = useStore();
+  const realPartner = usePartner();
   const alarmControl = useAlarmControl();
-  const params = useLocalSearchParams<{ step?: string; goalId?: string; add?: string }>();
+  const params = useLocalSearchParams<{ step?: string; goalId?: string; add?: string; tour?: string }>();
   const requestedStep = params.step === undefined ? undefined : Number(params.step);
   const step = requestedStep !== undefined && Number.isFinite(requestedStep)
     ? Math.max(0, Math.min(5, Math.trunc(requestedStep))) : store.state.setupStep;
@@ -45,6 +47,7 @@ export default function Setup() {
   const [paired, setPaired] = useState(false);
   useEffect(() => { void getAuthorization().then(value => setAlarmAuthorized(value === 'authorized')); }, [step]);
   const editing = store.state.setupComplete;
+  const returnToTour = editing && step === 4 && params.tour === '1';
   function move(next: number) {
     setNotice('');
     if (params.step !== undefined) router.setParams({ step: String(next) });
@@ -97,14 +100,14 @@ export default function Setup() {
   return <Screen scroll header={<View style={{ gap: 12 }}>
     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
       <AppText variant="label">aamu</AppText>
-      {(editing || step > 0) && <PillButton label="Back" variant="quiet" style={{ width: 112 }} onPress={() => editing ? router.back() : move(step - 1)} />}
+      {(editing || step > 0) && <PillButton label="Back" variant="quiet" style={{ width: 112 }} onPress={() => returnToTour ? router.replace('/how') : editing ? router.back() : move(step - 1)} />}
     </View>
     <AppText variant="caption" tone="secondary">{editing ? titles[step] : `${step + 1} of 6 · ${titles[step]}`}</AppText>
   </View>} footer={!messageLevel && !placeRecording ? <View style={{ gap: 10 }}>
     {notice || (step === 3 && alarmControl.notice) ? <AppText tone="secondary" accessibilityLiveRegion="polite">{notice || alarmControl.notice}</AppText> : null}
     {permissionDenied && <PillButton label="Open Settings" variant="secondary" onPress={() => Linking.openSettings()} />}
-    <PillButton label={editing ? 'Back to Home' : step === 5 ? 'Begin' : 'Continue'} variant={editing ? 'quiet' : 'primary'} disabled={!canContinue} loading={busy}
-      onPress={() => editing ? router.replace('/home') : step === 5 ? void finish() : move(step + 1)} />
+    <PillButton label={returnToTour ? 'Ring alarm' : editing ? 'Back to Home' : step === 5 ? 'Begin' : 'Continue'} variant={returnToTour ? 'primary' : editing ? 'quiet' : 'primary'} disabled={!canContinue} loading={busy}
+      onPress={() => returnToTour ? router.replace('/demo?tour=1') : editing ? router.replace('/home') : step === 5 ? void finish() : move(step + 1)} />
     {!editing && [1, 2, 4, 5].includes(step) && <PillButton label="Skip for now" variant="quiet" disabled={busy}
       onPress={() => step === 5 ? void finish() : move(step + 1)} />}
   </View> : undefined}>
@@ -178,15 +181,9 @@ export default function Setup() {
       </>}
       <PillButton label="Set alarm" variant={editing ? 'primary' : 'secondary'} outlined={!editing} onPress={() => void saveAlarm()} loading={busy} disabled={alarmControl.busy} />
     </>}
-    {step === 4 && <>
-      <SectionHeading title="A morning, shared" description="You don’t need to say anything. Just know someone else is up too." />
-      {paired ? <Card><AppText>You’re connected.</AppText><AppText tone="secondary">No need to reply.</AppText></Card> : <>
-        {createdCode && <Card><AppText tone="secondary">Your pairing code</AppText><AppText variant="step">{createdCode}</AppText></Card>}
-        <PillButton label="Create a code" variant="secondary" loading={busy} onPress={() => void pair(true)} />
-        <Field label="Enter a code" value={pairCode} onChangeText={setPairCode} autoCapitalize="characters" autoCorrect={false} />
-        <PillButton label="Connect" disabled={!pairCode.trim()} loading={busy} onPress={() => void pair(false)} />
-      </>}
-    </>}
+    {step === 4 && <PartnerSetup paired={paired || realPartner.paired} partnerUp={realPartner.partnerUpToday}
+      createdCode={createdCode} pairCode={pairCode} busy={busy} primaryAvailable={editing && !returnToTour}
+      onChangeCode={setPairCode} onCreateCode={() => void pair(true)} onConnect={() => void pair(false)} />}
     {step === 5 && <>
       <SectionHeading title="Your people" description="Someone you can call when you want a little company." />
       <Card><Field label="Safe person’s name" value={name} onChangeText={setName} textContentType="name" />

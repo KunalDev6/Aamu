@@ -333,13 +333,13 @@ export function GoalEditor({ onApproved, goalId }: { onApproved: () => void; goa
           onChangeText={text => editor.edit(size, text)} hint={stepHintLine(size, state.hints[size]) ?? undefined} />
       </LadderRung>)}</Card>
       <AppText variant="caption" tone="secondary">You can change any step. Finishing a step lets the next one grow a size.</AppText>
+      <PillButton label="Approve" disabled={!valid || state.saved} onPress={() => { void editor.approve(onApproved); }} />
       {view.editing === 'suggestions' && view.suggestions?.basis ? <Card tone="protected" padding={20} style={{ gap: 8 }}>
         <AppText variant="label">Why these steps</AppText>
         <AppText tone="secondary">{view.suggestions.basis.why}</AppText>
         <AppText variant="caption" tone="secondary">{`Source: ${view.suggestions.basis.source}. General research, not personal medical advice.`}</AppText>
       </Card> : null}
       {view.editing === 'suggestions' && view.suggestions?.underTheHood ? <ModelDetails details={view.suggestions.underTheHood} /> : null}
-      <PillButton label="Approve" disabled={!valid || state.saved} onPress={() => { void editor.approve(onApproved); }} />
     </View> : null}
     {state.saved ? <AppText accessibilityLiveRegion="polite" tone="secondary">Your steps are saved.</AppText> : null}
   </View>;

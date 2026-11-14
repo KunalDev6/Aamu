@@ -52,6 +52,42 @@ async function user(app: Awaited<ReturnType<typeof createRuntimeApp>>) {
 }
 const dashboard = { 'x-demo-dashboard-token': dashboardToken };
 
+test('local demo preview preflights allow the namespace header without bypassing authentication', async t => {
+  const f = fixture(); const app = await createRuntimeApp(f.options); t.after(() => app.close());
+  for (const origin of ['http://localhost:8081', 'http://127.0.0.1:8082']) {
+    for (const method of ['GET', 'PUT']) {
+      const response = await app.inject({ method: 'OPTIONS', url: method === 'GET' ? '/goals/revision' : '/goals',
+        headers: { origin, 'access-control-request-method': method,
+          'access-control-request-headers': 'authorization,content-type,x-aamu-demo' } });
+      assert.equal(response.statusCode, 204);
+      assert.equal(response.headers['access-control-allow-origin'], origin);
+      assert.equal(response.headers.vary, 'Origin');
+      assert.deepEqual(String(response.headers['access-control-allow-headers']).split(',').map(value => value.trim()),
+        ['authorization', 'content-type', 'x-aamu-demo']);
+      assert.equal(response.headers['access-control-allow-credentials'], undefined);
+    }
+    assert.equal((await app.inject({ url: '/goals/revision', headers: { origin, 'x-aamu-demo': 'true' } })).statusCode, 401);
+  }
+  assert.deepEqual(f.realWrites, []); assert.deepEqual(f.demoWrites, []);
+});
+
+test('preview CORS stays disabled for other origins and outside demo mode', async t => {
+  for (const enabled of [true, false]) {
+    const f = fixture(); const app = await createRuntimeApp({ ...f.options, demo: { ...f.options.demo, enabled } });
+    t.after(() => app.close());
+    const origins = enabled
+      ? ['https://localhost:8081', 'http://localhost.attacker.invalid:8081', 'http://192.168.1.2:8081']
+      : ['http://localhost:8081', 'http://127.0.0.1:8082'];
+    for (const origin of origins) {
+      const response = await app.inject({ method: 'OPTIONS', url: '/goals', headers: { origin,
+        'access-control-request-method': 'PUT', 'access-control-request-headers': 'x-aamu-demo' } });
+      assert.equal(response.headers['access-control-allow-origin'], undefined);
+      assert.equal(response.headers['access-control-allow-headers'], undefined);
+      assert.notEqual(response.statusCode, 204);
+    }
+  }
+});
+
 test('U28 demo defaults true, requires a private dashboard token, and can be explicitly disabled', async () => {
   const services = { DATABASE_URL: 'postgres://db.invalid/aamu', VALKEY_URL: 'rediss://cache.invalid' };
   await assert.rejects(readRuntimeConfig(services), error => error instanceof ConfigurationError && error.fields.includes('DEMO_DASHBOARD_TOKEN'));

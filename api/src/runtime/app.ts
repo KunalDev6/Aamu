@@ -30,7 +30,7 @@ export async function createRuntimeApp(options: { service: GoalService; reposito
       const origin = request.headers.origin;
       if (typeof origin !== 'string' || !localPreview.test(origin)) return;
       reply.header('Access-Control-Allow-Origin', origin).header('Vary', 'Origin')
-        .header('Access-Control-Allow-Headers', 'authorization, content-type')
+        .header('Access-Control-Allow-Headers', 'authorization, content-type, x-aamu-demo')
         .header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
       if (request.method === 'OPTIONS') return reply.code(204).send();
     });

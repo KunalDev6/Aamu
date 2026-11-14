@@ -249,3 +249,13 @@ Twelve390×844 captures now show five Home states plus Settings at 07:30/21:00 w
 The user approves U26's layout. Preserve its core state/scheduling/confirmation behavior while applying time-gated plain Sleep well, single evening confirmation line, exact partner wording, early alarm label, unboxed early/off controls, Settings chevrons, smooth sky/tinted water and subtle Reduce-Motion-aware ambience. The pure model and seven added tests are ready (34 Home passes), API/mobile typechecks pass at that checkpoint; last full aggregate remains330. Q113 is resolved: retain the truthful secondary line for paired own-only confirmation.
 
 Verify actual 03:59/04:00/06:59/07:00 and 17:59/18:00 boundaries and null-versus-false outcomes; review fixtures remain separate. Deliver the same twelve 07:30/21:00 captures plus ten-second motion recording, fresh composited contrast evidence and reduced-motion behavior. Native battery/audio/physical two-phone gates remain unverified and unchanged.
+
+
+## U37 presentation pass checkpoint
+
+Completed the bounded review fixes and browser rehearsal described in review/presentation-review.md: clinic startup/CORS/identity continuity, explicit partner choices, shorter explanation, step-first result and direct harder-morning cut, compact clinic presentation layout. No new service or dependency. Remaining proposal: consolidate the full presentation controller and isolate its temporary goal; physical alarms/audio/two-phone acceptance remains pending.
+
+
+## U38 navigation correction
+
+Post-goal bridge → Select a partner → partner screen → Ring alarm. Back still returns to the bridge. No real-pair completion gate was added. Latest source is authorized for GitHub publication.

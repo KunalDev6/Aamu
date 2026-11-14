@@ -3,20 +3,34 @@ import { Platform } from 'react-native';
 import type { GoalSyncRequest, GoalSyncResponse } from '../../src/goals/sync';
 import { demoEnabled } from './demo/config';
 import { demoDataHeaders } from './demo/seed';
+import { createBrowserIdentity } from '../../shared/demo/browser-identity';
 
 const baseUrl = (process.env.EXPO_PUBLIC_API_URL || 'http://127.0.0.1:3000').replace(/\/$/, '');
 const tokenKey = 'aamu.user-token';
-let webToken: string | null = null;
+const browserIdentity = createBrowserIdentity({ demo: demoEnabled, scope: baseUrl,
+  storage: () => typeof window === 'undefined' ? null : window.sessionStorage,
+  digest: async value => {
+    const bytes = await globalThis.crypto.subtle.digest('SHA-256', new TextEncoder().encode(value));
+    return Array.from(new Uint8Array(bytes), byte => byte.toString(16).padStart(2, '0')).join('');
+  },
+});
 let creatingIdentity: Promise<string> | null = null;
 export class ConnectionError extends Error {
   constructor() { super('Aamu could not connect. Please try again.'); }
 }
 export async function getUserToken(): Promise<string | null> {
-  return Platform.OS === 'web' ? webToken : SecureStore.getItemAsync(tokenKey);
+  return Platform.OS === 'web' ? browserIdentity.getToken() : SecureStore.getItemAsync(tokenKey);
 }
 export async function storeUserToken(token: string): Promise<void> {
-  if (Platform.OS === 'web') webToken = token;
+  if (Platform.OS === 'web') await browserIdentity.setToken(token);
   else await SecureStore.setItemAsync(tokenKey, token, { keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY });
+}
+/** Non-secret local binding; no token is placed in the app's saved state. */
+export async function getDemoIdentityHash(): Promise<string | null> {
+  return Platform.OS === 'web' && demoEnabled ? browserIdentity.getHash() : null;
+}
+export function subscribeDemoIdentity(listener: (hash: string) => void): () => void {
+  return Platform.OS === 'web' && demoEnabled ? browserIdentity.subscribe(listener) : () => {};
 }
 async function verifyDemoNamespace(token: string, signal?: AbortSignal): Promise<void> {
   // Old listeners may ignore an unknown header. Probe read-only and fail closed
@@ -41,7 +55,11 @@ async function request<T>(path: string, method: string, body?: unknown, signal?:
   return result;
 }
 export async function ensureIdentity(): Promise<string> {
+  // Creating an identity includes notifying the demo store. A second request
+  // must not slip through while its token is written but its binding is pending.
+  if (creatingIdentity) return creatingIdentity;
   const existing = await getUserToken();
+  if (creatingIdentity) return creatingIdentity;
   if (existing) return existing;
   if (!creatingIdentity) creatingIdentity = (async () => {
     const controller = new AbortController();

@@ -1,11 +1,13 @@
 import { useEffect } from 'react';
-import { AppState } from 'react-native';
+import { AppState, Platform } from 'react-native';
 import { useStore } from './store';
-import { apiPost, apiPut } from './api';
+import { apiPost, apiPut, ensureIdentity, getDemoIdentityHash } from './api';
 import { createClinicSynchronizer } from '../../shared/demo/clinic';
 import { acknowledgeMorningUpload, morningNeedsUpload, projectMorningUpload } from '../../shared/mornings/sync';
 import { demoEnabled } from './demo/config';
 import { markGoalSyncPending } from '../../src/goals/sync';
+import { reconcileDemoIdentity } from '../../shared/demo/identity-state';
+import { requestClinicCallback } from '../../shared/demo/callback';
 
 type StoreAccess = Pick<ReturnType<typeof useStore>, 'read' | 'update'>;
 const synchronizers = new WeakMap<StoreAccess['read'], ReturnType<typeof createClinicSynchronizer<ReturnType<StoreAccess['read']>>>>();
@@ -22,17 +24,20 @@ async function bounded<T>(work: (signal: AbortSignal) => Promise<T>) {
   const controller = new AbortController(); const timeout = setTimeout(() => controller.abort(), 5_000);
   try { return await work(controller.signal); } finally { clearTimeout(timeout); }
 }
+async function prepareClinicIdentity(store: StoreAccess): Promise<void> {
+  await ensureIdentity();
+  if (Platform.OS === 'web' && demoEnabled) {
+    const hash = await getDemoIdentityHash();
+    if (!hash) throw Error('Demo identity unavailable');
+    store.update(state => reconcileDemoIdentity(state, hash));
+  }
+}
 
 export async function askClinicToCall(store: StoreAccess): Promise<number> {
   if (!demoEnabled || !store.read().clinicSharing?.enabled) throw Error('Clinic is not connected');
-  if (!await clinicSynchronizer(store).flush()) throw Error('Clinic could not connect');
-  const current = store.read().clinicSharing;
-  if (!current?.enabled || current.syncPending) throw Error('Clinic is not connected');
-  const response = await bounded(signal => apiPost<{ demo: true; callbackRequestedAt: number }>('/clinic/callback', {}, signal));
-  if (response.demo !== true || !Number.isFinite(response.callbackRequestedAt)) throw Error('Invalid clinic response');
-  store.update(state => ({ ...state, clinicSharing: state.clinicSharing
-    ? { ...state.clinicSharing, callbackRequestedAt: response.callbackRequestedAt } : undefined }));
-  return response.callbackRequestedAt;
+  return requestClinicCallback({ ...store, prepareIdentity: () => prepareClinicIdentity(store),
+    flushSharing: () => clinicSynchronizer(store).flush(),
+    post: () => bounded(signal => apiPost<{ demo: true; callbackRequestedAt: number }>('/clinic/callback', {}, signal)) });
 }
 
 /** Seed history can sync before OS alarm permission; it never emits partner_up. */
@@ -46,6 +51,8 @@ export function ClinicSyncCoordinator() {
       if (running || stopped || AppState.currentState !== 'active') return;
       running = true;
       try {
+        await prepareClinicIdentity({ read, update });
+        if (stopped) return;
         await clinicSynchronizer({ read, update }).flush();
         // Normal MorningCoordinator takes over after actual native setup. Until
         // then upload only the explicit prior-day fixtures, not fabricated today.

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Linking, View } from 'react-native';
+import { Linking, Platform, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { AppText, Card, PillButton, Screen } from '../ui';
 import { useStore } from '../store';
@@ -14,6 +14,8 @@ export default function Help() {
   const { from } = useLocalSearchParams<{ from?: string }>();
   const [breathing, setBreathing] = useState(false); const [elapsed, setElapsed] = useState(0);
   const [notice, setNotice] = useState(''); const [asking, setAsking] = useState(false);
+  const callbackConfirmed = Boolean(store.state.clinicSharing?.callbackRequestedAt &&
+    !store.state.clinicSharing.syncPending && (Platform.OS !== 'web' || store.state.demoIdentityHash));
   useEffect(() => { if (!breathing) return; const timer = setInterval(() => setElapsed(value => value + 1), 1000); return () => clearInterval(timer); }, [breathing]);
   useEffect(() => { endTour(); }, []); // The guided demo finishes here.
   const inhale = elapsed % 10 < 4;
@@ -39,11 +41,11 @@ export default function Help() {
     {demoEnabled && store.state.clinicSharing?.enabled && <Card>
       <AppText variant="label">{demoText('Demo clinic', 'Your clinic')}</AppText>
       <AppText tone="secondary">{demoText('Ask for a quiet check-in call. This appears in the demo dashboard; no real clinician will call.', 'Ask for a quiet check-in call.')}</AppText>
-      {store.state.clinicSharing.callbackRequestedAt
+      {callbackConfirmed
         ? <AppText accessibilityLiveRegion="polite">{demoText('Asked for a call · Demo', 'Asked for a call')}</AppText>
         : <PillButton label="Ask my clinic to call me" loading={asking} onPress={() => {
           setAsking(true); setNotice('');
-          void askClinicToCall(store).then(() => setNotice(demoText('Asked for a call · Demo', 'Asked for a call')))
+          void askClinicToCall(store)
             .catch(() => setNotice(demoText('The demo clinic could not be reached. Please try again.', 'Your clinic could not be reached. Please try again.'))).finally(() => setAsking(false));
         }} />}
     </Card>}
