@@ -30,7 +30,7 @@ Screenshots: `screenshots/presentation-review/partner-choices.jpg`, `harder-morn
 | 0:00–0:10 | Calm landscape, brief problem statement | Everyday support when daily treatment visits end. |
 | 0:10–0:30 | One goal → three editable steps → Approve | The person chooses a goal; the models suggest/check the ladder. |
 | 0:30–0:45 | Partner choices, then code connection or labelled anonymous preview | A small sign of getting up, without sharing goals or audio. |
-| 0:45–1:05 | Easier morning, uninterrupted two-second hold, Full step | Show the shared sunrise and one clear action. |
+| 0:45–1:05 | Easier morning, uninterrupted two-second hold, Small step | Start gently, show the shared sunrise and one clear action. |
 | 1:05–1:30 | Explicit cut: two snoozes later → hold → Tiny → Done | Local rules adapt effort; completion allows the next step to grow. |
 | 1:30–1:50 | Ask for a call, cut to clinic request at top | Show an actual request reaching the demo service. |
 | 1:50–2:00 | Sunrise and one closing sentence | Sense, respond, learn; prototype with compressed/simulated scenes. |
@@ -41,7 +41,7 @@ Keep research and detailed scoring behind their links; do not read every paragra
 
 - The guided partner is simulated. Selecting Close friend/Family does not make the guided tour publish real wake signals. Film a separate real native hold/two-phone sun update if claiming live partner delivery. Actual hold → public backend → WebSocket/polling is the existing real path; it is not a conventional push notification.
 - Guided morning history is isolated and is not uploaded as the clinic's real morning history. The demonstrated live handoff is the callback request. The clinic's pattern rows come from its fixtures and connected demo-store history.
-- The guided first example deliberately starts at carried Full and is an illustrative later morning, not the actual first day after setup (which starts Small).
+- U39 removes the old carried-Full demo exception. The guided first example now starts Small, or Tiny on a hard morning, matching real first-day progression. Earlier Full screenshots/walkthroughs above are historical evidence from U37.
 - Start demo still resets its earlier tour goals/drafts. The inherited capacity fallback can delete the third goal when all three slots are occupied; avoid running it against valuable presenter goals. A safer future change is a dedicated temporary tour goal rather than deleting an ordinary goal. This was identified during review and not changed in this pass.
 - A single presentation controller spanning goal/partner/morning/clinic would be the larger follow-up. Current fixes remove the immediate mid-tour Home discontinuity without merging simulated history into real state.
 - Physical locked/closed alarms, microphone/audio, and live two-phone acceptance remain pending. No new clinical validity or battery claim is made.

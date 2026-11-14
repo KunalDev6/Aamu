@@ -259,3 +259,8 @@ Completed the bounded review fixes and browser rehearsal described in review/pre
 ## U38 navigation correction
 
 Post-goal bridge → Select a partner → partner screen → Ring alarm. Back still returns to the bridge. No real-pair completion gate was added. Latest source is authorized for GitHub publication.
+
+
+## U39 — first-day demo alignment
+
+Removed the guided Full head start and updated the bridge copy. The demo now starts Small/Tiny using the unchanged progression rules. The filmed easier-day beat should show Small; historical Full screenshots do not reflect this change.

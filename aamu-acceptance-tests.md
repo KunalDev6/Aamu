@@ -660,3 +660,8 @@ Relevant command: `cd api && node --experimental-require-module --experimental-s
 ## U38 navigation/copy verification
 
 Browser observed exactly one post-goal button, Select a partner; it opened the partner choices with Ring alarm as the next action. The existing morning's expanded explanation now labels Morning difficulty points and explains that fewer means easier; sizing logic is unchanged. Mobile typecheck and targeted lint pass. Screenshot: review/screenshots/presentation-review/select-partner-only.jpg.
+
+
+## U39 focused checks
+
+16 demo/presentation tests pass, including updated guided Small→hard Tiny coverage and existing completed Small→Full progression. Mobile typecheck/targeted lint checked separately. Real sizing algorithm unchanged; no new physical-device acceptance claimed.

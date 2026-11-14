@@ -346,3 +346,8 @@ See review/presentation-review.md for changes, 120-second edit and screenshots. 
 The post-goal bridge now has one warm primary action, Select a partner. Ring alarm is on the guided partner screen and goes directly to the demo morning. Back returns to the bridge. This does not require a real pair or alter normal setup. Mobile typecheck and targeted lint pass. No dependency added.
 
 U38 scoring clarification: zero points means low morning difficulty, not low task difficulty. Full is permitted only when both the morning limit and progression allow it; the guided scenario starts with carried Full while a real first day starts Small. Explanation copy now names Morning difficulty points and current progression, without changing rules. Browser verified the post-goal single action and explanation.
+
+
+## U39 — smaller first step
+
+Guided demo now starts with carry Small rather than Full, matching the real first-day rule (easy/medium Small; hard Tiny). Bridge copy explains the gentle start. Full remains available after completion raises progression, subject to the morning limit. Old U37 Full screenshots are historical. 16 focused demo/presentation tests pass. No dependency added.

@@ -18,7 +18,7 @@ export default function How() {
     {goal && <Card><AppText variant="caption" tone="secondary">Your goal</AppText><AppText variant="step">{goal.goalText}</AppText></Card>}
     <View style={{ gap: 18 }}>
       <View style={{ gap: 4 }}><AppText variant="label">A harder start. A smaller step.</AppText>
-        <AppText tone="secondary">Tiny, Small or Full. You can always make today’s step smaller.</AppText></View>
+        <AppText tone="secondary">Your first morning starts with Small, or Tiny if it’s a hard morning. You can always make today’s step smaller.</AppText></View>
       <View style={{ gap: 4 }}><AppText variant="label">Small wins build from here.</AppText>
         <AppText tone="secondary">Done lets the next step grow by one size, if that morning allows it.</AppText></View>
     </View>

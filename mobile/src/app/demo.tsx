@@ -57,11 +57,11 @@ export default function Demo() {
     if (!ready || !demoEnabled || start !== '1' || started.current) return;
     started.current = true; startMorning();
   }, [ready, start]);
-  // Guided demo: a fresh demo history with the one goal just approved, a partner,
-  // and a carried size of Full so the easier morning shows the whole step.
+  // Guided demo starts with the real first-day limit: Small, or Tiny when the
+  // morning needs it. Full becomes available only through step completion.
   const startGuided = useEffectEvent(() => {
     changeDemo(() => ({ ...ringDemo({ ...emptyDemoSession(), fast: true, selectedLevel: 'sensed', paired: true,
-      onlyGoalId: tour?.goalId ?? null, initialCarry: 'full' }, Date.now(), localDate(), -new Date().getTimezoneOffset()), partnerUp: true }));
+      onlyGoalId: tour?.goalId ?? null, initialCarry: 'small' }, Date.now(), localDate(), -new Date().getTimezoneOffset()), partnerUp: true }));
     setControls(false); setHold(0);
   });
   // Arriving from Home's "Ring the alarm": the first guided morning starts the fresh

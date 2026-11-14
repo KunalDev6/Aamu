@@ -199,12 +199,12 @@ test('a sensed demo morning scores its own snoozes and time with the real rules'
   assert.equal(currentDemoMorning(once)?.level, 'easy');
 });
 
-test('guided demo offers its one goal every morning and starts from the chosen carried size', () => {
+test('guided demo starts Small, keeps its one goal, and offers Tiny on a hard morning', () => {
   const real = resources();
-  let session = ringDemo({ ...emptyDemoSession(), fast: true, onlyGoalId: 'B', initialCarry: 'full' }, now, '2026-11-14', 120);
+  let session = ringDemo({ ...emptyDemoSession(), fast: true, onlyGoalId: 'B', initialCarry: 'small' }, now, '2026-11-14', 120);
   session = finishDemoVoice(holdDemo(session, real, now + 3000), real);
   assert.equal(currentDemoMorning(session)?.level, 'easy'); assert.equal(currentDemoMorning(session)?.goalId, 'B');
-  assert.equal(currentDemoMorning(session)?.stepSize, 'full'); assert.equal(session.rotationGoalId, null);
+  assert.equal(currentDemoMorning(session)?.stepSize, 'small'); assert.equal(session.rotationGoalId, null);
   session = ringDemo(session, now + 20_000, '2026-11-14', 120);
   session = advanceDemoTime(snoozeDemo(session, now + 23_000), real, now + 31_000);
   session = advanceDemoTime(snoozeDemo(session, now + 34_000), real, now + 42_000);

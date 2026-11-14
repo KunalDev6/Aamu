@@ -785,3 +785,8 @@ CONFIRMED: the user authorizes reviewing Claude's changes and making bounded fix
 CONFIRMED: the post-goal bridge has only Select a partner. Its direct Ring alarm bypass is removed; the guided partner screen now advances to the alarm instead of returning to the bridge. Pairing is not newly mandatory. Latest source publication to the existing GitHub repository is explicitly authorized, with secrets excluded. Source: requirements/answers/u38.md.
 
 U38 follow-up: the user asked why zero points can yield Full. Explained that points measure morning difficulty, and the offered size is the smaller of that morning's cap and progression. The guided demo starts at Full; real first-day carry remains Small. Copy clarified; no algorithm change requested or made.
+
+
+## U39 — gentle first step
+
+The user rejects starting with the larger step immediately after hospital. Guided first-day carry now matches the existing real rule: Small, or Tiny on a hard morning. This supersedes the guided Full head start described in U33/U35 and U37/U38. Full can follow a completed smaller step when the morning permits it. Source: requirements/answers/u39.md.
